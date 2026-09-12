@@ -1,4 +1,4 @@
-import java.io.*;
+import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -6,18 +6,13 @@ import java.util.Map;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        InputStreamReader path = new InputStreamReader(System.in);
-
-        try {
-            System.out.print("Ingrese la ruta del archivo que quiera compilar");
-            BufferedReader entrada = new BufferedReader(path);
-            //compilateLine(entrada)
-        } catch (Exception e) {
-            System.out.print(e);
-        }
+        String path ="C:\\Users\\Mateo\\eclipse-workspace\\pruebas\\bin\\pruebas\\codigo.txt";
+		Lexer lexLuthor = new Lexer(path);
+		int token=0;
+		while (token!=-1) { //ESTO HABRIA QUE PASARLO AL PARSER CREO
+			token = Lexer.yylex();
+			System.out.println(token);
+		};
     }
-    public static void compileLine(FileReader originalCode){
-        Lexer lexicalAnalizer = new Lexer();
-        lexicalAnalizer.yylex(originalCode, new HashMap<>());
-    }
+    
 }
