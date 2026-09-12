@@ -276,7 +276,7 @@ public class Lexer {
         int estadoActual = 0;
         estadosPasados.add(estadoActual);
 
-        while (estadoActual != ESTADO_FINAL && estadoActual != TRANSICION_INVALIDA && indexFile<codigo.length()) ) {
+        while (estadoActual != ESTADO_FINAL && estadoActual != TRANSICION_INVALIDA && indexFile<sourceCode.length()) ) {
         	String transicion = "e"+estadoActual;
             char simbolo = sourceCode.charAt(indexFile);
             int filaSimbolo = filaSimbolos.get(simbolo);
