@@ -1,4 +1,4 @@
-package pruebas;
+//package pruebas;
 /*Asumimos que el estado final es el ESTADO_FINAL
  Una celda invalida esta representada con un TRANSICION_INVALIDA
 */
@@ -198,6 +198,7 @@ public class Lexer {
     
     
     public void construyeFilaSimbolos() {
+        filaSimbolos = new HashMap<String,Integer>();
         filaSimbolos.put("'",0);
         filaSimbolos.put("{",1);
         filaSimbolos.put("}",2);
@@ -276,10 +277,10 @@ public class Lexer {
         int estadoActual = 0;
         estadosPasados.add(estadoActual);
 
-        while (estadoActual != ESTADO_FINAL && estadoActual != TRANSICION_INVALIDA && indexFile<sourceCode.length()) ) {
+        while (estadoActual != ESTADO_FINAL && estadoActual != TRANSICION_INVALIDA && indexFile<sourceCode.length()){
         	String transicion = "e"+estadoActual;
             char simbolo = sourceCode.charAt(indexFile);
-            int filaSimbolo = filaSimbolos.get(simbolo);
+            int filaSimbolo = filaSimbolos.get(String.valueOf(simbolo));
             estadoActual = matriz_transiciones[filaSimbolo][estadoActual];
             transicion=transicion+"e"+estadoActual;
             estadosPasados.add(estadoActual);
@@ -292,7 +293,12 @@ public class Lexer {
              //   System.out.println(error);
                 return -1;
             }
-            System.out.println(indexFile);
+            //System.out.println(indexFile);
+            
+            
+            
+            
+            
             lexema=accionesSemanticas.get(transicion).aplicarAccion(lexema, simbolo);
             //aplicar accion semantica
           //  accionesSemanticas.get(transicion).aplicarAccion(simbolo);            
@@ -306,10 +312,11 @@ public class Lexer {
                 //registrar token y guardar lexema
                // int token = devuelveTokenLexema(lexema);
 
-                return tokenOutput;
+                //return tokenOutput;
             
         }
-        return -1;
+        return tokenOutput;
+        //return -1;
     }
     public static String detectarError(ArrayList<Integer> estadosPasados) {
         String error = "";
