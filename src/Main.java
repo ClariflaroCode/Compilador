@@ -1,3 +1,6 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -6,13 +9,21 @@ import java.util.Map;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        String path ="src/codigo.txt";
-		Lexer lexLuthor = new Lexer(path);
-		int token=0;
-		while (token!=-1) { //ESTO HABRIA QUE PASARLO AL PARSER CREO
-			token = Lexer.yylex();
-			System.out.println(token);
-		};
+		System.out.println("Ingrese el path de donde se encuentra el archivo que quiera compilar");
+		try {
+			BufferedReader entrada =  new BufferedReader(new InputStreamReader(System.in));
+			String path = String.valueOf(entrada.readLine());
+			    //String path ="src/codigo.txt";
+			Lexer lexLuthor = new Lexer(path);
+			int token=0;
+			while (token!=-1) { //ESTO HABRIA QUE PASARLO AL PARSER CREO
+				token = Lexer.yylex();
+				System.out.println(token);
+			};
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+    
     }
     
 }
