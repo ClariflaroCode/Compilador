@@ -9,12 +9,12 @@
 
     %%
    if
-    	: IF ‘(’ comp ‘)’ bloque_ejecutable END_IF
+    	: IF '(' comp ')' bloque_ejecutable END_IF
     	| IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF 
-	| IF ‘(’ comp ‘)’ sentencia_ejecutable END_IF
-	| IF ‘(’ comp ‘)’ sentencia_ejecutable ELSE sentencia_ejecutable END_IF
-	| IF ‘(’ comp ‘)’ bloque_ejecutable ELSE sentencia_ejecutable END_IF
-	| IF ‘(’ comp ‘)’ sentencia_ejecutable ELSE bloque_ejecutable END_IF
+	| IF '(' comp ')' sentencia_ejecutable END_IF
+	| IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF
+	| IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF
+	| IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF
 	;
 
    programa
@@ -29,7 +29,7 @@
 	| sentencia_ejecutable sentencias_ejecutables
 	;
    sentencia_ejecutable
-	: assign ‘;’ 
+	: assign ';' 
 	| if ';'
 	| while_repeat ';'
 	| retorno ';'
@@ -130,8 +130,8 @@
 	| WHILE '(' comp ')' REPEAT sentencia_ejecutable
 	;
    comp
-	: expr ‘<’ expr {System.out.println(“Es una comparacion <”)}
-	| expr ‘>’ expr {System.out.println(“Es una comparacion >”)}
+	: expr '<' expr {System.out.println(“Es una comparacion <”)}
+	| expr '>' expr {System.out.println(“Es una comparacion >”)}
 	| expr MAYOR_IGUAL expr {System.out.println(“Es una comparacion >=”)}
 	| expr MENOR_IGUAL expr {System.out.println(“Es una comparacion <=”)}
 	| expr DISTINTO expr {System.out.println(“Es una desigualdad”)}
@@ -141,24 +141,24 @@
     assign 
         : ID OP_ASSIGN expr 
 	{System.out.println(“Es una asignación con := ”)}
-        |  ID ‘=’ expr
+        |  ID '=' expr
 	{System.out.println(“Es una asignación con = ”)}
 	;
 
 
     expr
-        : expr ‘+’ term
+        : expr '+' term
             { System.out.print(“Es una suma de los valores: “ , $1, “ y ” , $2)}
-        | expr ‘-’ term
+        | expr '-' term
             { System.out.print(“Es una resta de los valores: “ , $1, “ y ” , $2)}
         | term
             { System.out.println(“Es un término”)}
         ;
 
     term
-        : term ‘/’ factor
+        : term '/' factor
             { System.out.print(“Es una división de los valores: “ , $1, “ y ” , $2”)}
-        | term ‘*’ factor
+        | term '*' factor
             { System.out.print(“Es una multiplicación de los valores: “ , $1, “ y ” , $2”)}
         | factor
             { System.out.print(“Es un factor”)}
@@ -168,7 +168,7 @@
         : ID
             { System.out.println(“Es un id”)}
 	| cte
-	|  ‘(’  expr ‘)’
+	|  '('  expr ')'
 	| invocacion_funcion
         ;
     cte
