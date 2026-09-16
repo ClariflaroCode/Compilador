@@ -2,7 +2,7 @@
         import java.io.*;
     %}
 
-    %token ID, UNINTEGER, DOUBLEF
+    %token ID, UNINTEGER, DOUBLEF, STRING, CTE_ENTERA, CTE_DOUBLE
     %token WHILE, REPEAT, AUTO, TYPEDEF, FRIEND, PRIVATE, EXTENDS
     %token MAYOR_IGUAL, MENOR_IGUAL, DISTINTO, IGUALDAD, OP_ASSIGN
     %token IF, ELSE, END_IF, BEGIN, END, POUT, RET, CLASS, FUNCTION
@@ -69,7 +69,7 @@
 	: declaracion_var
 	| enum
 	| PRIVATE enum
-	| PRIVATE declaracion_var {System.out.println("estamos permitiendo declaracion multiple de atributos)}
+	| PRIVATE declaracion_var {System.out.println("estamos permitiendo declaracion multiple de atributos")}
    	;
 	
    friendly
