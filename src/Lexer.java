@@ -79,7 +79,14 @@ public class Lexer {
                 Map.entry("!=", 271),
                 Map.entry("==", 272),
                 Map.entry(":=", 273),
-                Map.entry("string", 274)
+                Map.entry("string", 274),
+                Map.entry("while", 275),
+                Map.entry("repeat", 276),
+                Map.entry("auto", 277),
+                Map.entry("typedef", 278),
+                Map.entry("friend", 279),
+                Map.entry("private", 280),
+                Map.entry("extends", 281)
         );
         construyeFilaSimbolos();
     //    tablaSimbolos = Map.ofEntries(null);
@@ -284,9 +291,7 @@ public class Lexer {
             estadoActual = matriz_transiciones[filaSimbolo][estadoActual];
             transicion=transicion+"e"+estadoActual;
             estadosPasados.add(estadoActual);
-            //if (accionSemanticaATomar(estadosPasados) != null) {
 
-            //}
             indexFile++;
             if (estadoActual == TRANSICION_INVALIDA) {
             //    String error = detectarError(estadosPasados.get(estadosPasados.size()-1));
@@ -295,59 +300,13 @@ public class Lexer {
             }
             //System.out.println(indexFile);
             
-            
-            
-            
-            
             lexema=accionesSemanticas.get(transicion).aplicarAccion(lexema, simbolo);
-            //aplicar accion semantica
-          //  accionesSemanticas.get(transicion).aplicarAccion(simbolo);            
-            //if (estadoActual == ESTADO_FINAL) {
-                //ver si agregar a la tabla de simbolos
-                //tablaSimbolos.put(lexema, tokens.get(lexema)); //algo asi ???
-
-                //ver si hay que hacer alguna accion semantica
-
-
-                //registrar token y guardar lexema
-               // int token = devuelveTokenLexema(lexema);
-
-                //return tokenOutput;
-            
         }
         return tokenOutput;
-        //return -1;
     }
     public static String detectarError(ArrayList<Integer> estadosPasados) {
         String error = "";
         return error;
     }
-
-    /*
-    public static int yylex2(int estadoInicial, int filaSimbolo, String cadenaActual) {
-        if (estadoInicial == ESTADO_FINAL) {
-            //llamar al Parser, devolver lexema y ver tema de acciones semanticas
-            //int token = Parser.yylValue();
-
-            int token =  tokens.get()
-            return token;
-        } else if (estadoInicial == TRANSICION_INVALIDA) {
-            System.out.print("ERROR");
-            return filaSimbolo;
-        } else {
-            int proximoEstado = matriz_transiciones[filaSimbolo][estadoInicial];
-            //al archivo lo convertis a un string, vas recorriendo avanzando en el indice,
-            //tenemos que incrementar la posicion en la lectura????
-
-            yylex(proximoEstado, pedirProximoSimboloDelCodigo());
-
-            //dado las acciones semanticas que reconoció sé que simbolo es?
-            //guardar el camino
-        }
-
-
-        return 0;
-    }
-*/
 
 }
