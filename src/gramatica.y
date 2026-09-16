@@ -105,7 +105,7 @@
 	: tipo ID
 	| tipo ID ',' parametros_formales
 	;
-   invocacion_func
+   invocacion_funcion
 	: ID '(' parametros_reales ')'
 	;
    parametros_reales
@@ -165,12 +165,17 @@
         ;
 
     factor
-        : ID
+        : variable
             { System.out.println(“Es un id”)}
 	| cte
 	|  '('  expr ')'
 	| invocacion_funcion
         ;
+    variable
+    : ID 
+    | ID '.' ID
+    | ID '.' invocacion_funcion
+
     cte
 	: CTE_ENTERA
 	| CTE_DOUBLE
