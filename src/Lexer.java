@@ -9,15 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 interface AccionSemantica {
-	String aplicarAccion(String lexema,char entrada);
-	
+	String aplicarAccion(String lexema,char entrada);	
 	//si necesitamos 3, hacemos una lista de objetos
 }
-
-// to-do list
-// algo que lea un archivo por lineas
-// una funcion que traiga la siguiente linea y le de un simbolo a yylex
-
 
 public class Lexer {
     private static final int ESTADO_FINAL = 17;
@@ -53,14 +47,9 @@ public class Lexer {
     private static Map<String, AccionSemantica> accionesSemanticas; 
    // private static Map<String, Integer> tablaSimbolos;
     private static String sourceCode;
-    
 
-    public Lexer(String path) {
-    	try {
-    		sourceCode = Files.readString(Path.of(path));
-    	} catch (Exception e) {
-    		System.out.println("No valid path for source code");
-    	}
+    public Lexer() {
+    
         tokens = Map.ofEntries(
                 Map.entry("if", 257),
                 Map.entry("else", 258),
@@ -95,7 +84,13 @@ public class Lexer {
         construyeAccionesSemanticas();
 
     }
-    
+    public void recibirPath(String path){ 
+        try {
+    		sourceCode = Files.readString(Path.of(path));
+    	} catch (Exception e) {
+    		System.out.println("No valid path for source code");
+    	}
+    }
     public void construyeAccionesSemanticas(){
     	//por ahora faltan todos los warnings
     			//cambiar los tokens directamente por el numero
@@ -126,6 +121,7 @@ public class Lexer {
     			AccionSemantica as10=(lexema,entrada)->{return "";};
     			AccionSemantica as11=(lexema,entrada)->{
     				tokenOutput = tokens.get("cte_entera");
+                    //yylval = new ParserVal();
     				return as1.aplicarAccion(lexema, entrada);};
     			AccionSemantica as12=(lexema,entrada)->{
     				tokenOutput=tokens.get("cte_double");

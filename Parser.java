@@ -439,6 +439,35 @@ final static String yyrule[] = {
 "cte : CTE_DOUBLE",
 };
 
+//#line 184 ".\src\gramatica.y"
+
+static Lex lex = null;
+
+static Parser par = null;
+
+public static void main (String [] args) {
+
+System.out.println("Iniciando compilación...");
+
+lex = new Lexer (args[0]);
+
+par = new Parser (false);
+
+par.run();
+
+System.out.println("Fin compilación");
+}
+
+int yylex () {
+        int token = lex.getToken();
+        yylval = new ParserVal(lex.punteroTS);
+        return token;
+}
+
+void yyerror (String s){
+System.out.println(s);
+}
+//#line 399 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -660,7 +689,7 @@ case 74:
 //#line 169 ".\src\gramatica.y"
 { System.out.println(“Es un id”)}
 break;
-//#line 587 "Parser.java"
+//#line 616 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

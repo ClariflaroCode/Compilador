@@ -181,3 +181,30 @@
 	| CTE_DOUBLE
 	;
 %%
+
+static Lex lex = null;
+
+static Parser par = null;
+
+public static void main (String [] args) {
+
+System.out.println("Iniciando compilación...");
+
+lex = new Lexer (args[0]);
+
+par = new Parser (false);
+
+par.run();
+
+System.out.println("Fin compilación");
+}
+
+int yylex () {
+        int token = lex.getToken();
+        yylval = new ParserVal(lex.punteroTS);
+        return token;
+}
+
+void yyerror (String s){
+System.out.println(s);
+}
