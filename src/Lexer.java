@@ -72,8 +72,8 @@ public class Lexer {
                 Map.entry("class", 264),
                 Map.entry("function", 265),
                 Map.entry("id", 266),
-                Map.entry("uninteger", 267),
-                Map.entry("doublef", 268),
+                Map.entry("cte_entera", 267),
+                Map.entry("cte_double", 268),
                 Map.entry(">=", 269),
                 Map.entry("<=", 270),
                 Map.entry("!=", 271),
@@ -86,7 +86,9 @@ public class Lexer {
                 Map.entry("typedef", 278),
                 Map.entry("friend", 279),
                 Map.entry("private", 280),
-                Map.entry("extends", 281)
+                Map.entry("extends", 281),
+                Map.entry("uninteger", 282),
+                Map.entry("doublef", 283)
         );
         construyeFilaSimbolos();
     //    tablaSimbolos = Map.ofEntries(null);
@@ -123,14 +125,14 @@ public class Lexer {
     			return "";};
     			AccionSemantica as10=(lexema,entrada)->{return "";};
     			AccionSemantica as11=(lexema,entrada)->{
-    				tokenOutput = tokens.get("uninteger");
+    				tokenOutput = tokens.get("cte_entera");
     				return as1.aplicarAccion(lexema, entrada);};
     			AccionSemantica as12=(lexema,entrada)->{
-    				tokenOutput=tokens.get("doublef");
+    				tokenOutput=tokens.get("cte_double");
     				return as3.aplicarAccion(lexema, entrada);
     			};
     			AccionSemantica as13=(lexema,entrada)->{
-    				tokenOutput=tokens.get("doublef");
+    				tokenOutput=tokens.get("cte_double");
     				return as4.aplicarAccion(lexema, entrada);
     			};
 
