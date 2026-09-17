@@ -109,8 +109,8 @@
 	: ID '(' parametros_reales ')'
 	;
    parametros_reales
-	: expr
-	| expr , parametros_reales
+	: expr_asig
+	| expr_asig ',' parametros_reales
 	;
    retorno
 	: RET '(' expr ')'
@@ -138,13 +138,17 @@
 	| expr IGUALDAD expr {System.out.println(“Es una igualdad”)}
 	;
 
+
     assign 
-        : ID OP_ASSIGN expr 
+        : ID OP_ASSIGN expr_asig 
 	{System.out.println(“Es una asignación con := ”)}
         |  ID '=' expr
 	{System.out.println(“Es una asignación con = ”)}
 	;
 
+    expr_asig
+        : expr
+        | expr "=" expr
 
     expr
         : expr '+' term
@@ -166,20 +170,19 @@
 
     factor
         : variable
-            { System.out.println(“Es un id”)}
-	| cte
-	|  '('  expr ')'
-	| invocacion_funcion
+                { System.out.println(“Es un id”)}
+        | cte
+        | invocacion_funcion
         ;
     variable
-    : ID 
-    | ID '.' ID
-    | ID '.' invocacion_funcion
+        : ID 
+        | ID '.' ID
+        | ID '.' invocacion_funcion
 
     cte
-	: CTE_ENTERA
-	| CTE_DOUBLE
-	;
+        : CTE_ENTERA
+        | CTE_DOUBLE
+        ;
 %%
 
 static Lex lex = null;
