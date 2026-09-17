@@ -11,140 +11,140 @@
    if
     	: IF '(' comp ')' bloque_ejecutable END_IF
     	| IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF 
-	| IF '(' comp ')' sentencia_ejecutable END_IF
-	| IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF
-	| IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF
-	| IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF
-	;
+        | IF '(' comp ')' sentencia_ejecutable END_IF
+        | IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF
+        | IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF
+        | IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF
+        ;
 
    programa
-	: ID sentencias_declarativas bloque_ejecutable
-	;
+        : ID sentencias_declarativas bloque_ejecutable
+        ;
 
    bloque_ejecutable
-	: BEGIN sentencias_ejecutables END
-	;
+        : BEGIN sentencias_ejecutables END
+        ;
    sentencias_ejecutables
-	: sentencia_ejecutable
-	| sentencia_ejecutable sentencias_ejecutables
-	;
+        : sentencia_ejecutable
+        | sentencia_ejecutable sentencias_ejecutables
+        ;
    sentencia_ejecutable
-	: assign ';' 
-	| if ';'
-	| while_repeat ';'
-	| retorno ';'
-	| print ';'
-	;
+        : assign ';' 
+        | if ';'
+        | while_repeat ';'
+        | retorno ';'
+        | print ';'
+        ;
 	
    sentencias_declarativas
-	: sentencia_declarativa
-	| sentencia_declarativa sentencias_declarativas
-	;
+        : sentencia_declarativa
+        | sentencia_declarativa sentencias_declarativas
+        ;
    sentencia_declarativa
-	: declaracion_var ';'
-	| funcion ';'
-	| clase ';'
-	| enum ';'
-	;
+        : declaracion_var ';'
+        | funcion ';'
+        | clase ';'
+        | enum ';'
+        ;
    clase
-	: CLASS ID BEGIN cuerpo_clase END
-	| CLASS ID cuerpo_clase END
-	;
+        : CLASS ID BEGIN cuerpo_clase END
+        | CLASS ID cuerpo_clase END
+        ;
    cuerpo_clase
-	: sent_clase
-	| sent_clase cuerpo_clase
-	;
+        : sent_clase
+        | sent_clase cuerpo_clase
+        ;
    sent_clase
-	: metodo ';'
-	| atributo ';'
-	| friendly ';'
-	| herencia ';'
-	;
+        : metodo ';'
+        | atributo ';'
+        | friendly ';'
+        | herencia ';'
+        ;
 	
    metodo
-	: PRIVATE funcion {System.out.println("estamos admitiendo metodos con auto");}
-	| funcion
-	;
+        : PRIVATE funcion {System.out.println("estamos admitiendo metodos con auto");}
+        | funcion
+        ;
    atributo
-	: declaracion_var
-	| enum
-	| PRIVATE enum
-	| PRIVATE declaracion_var {System.out.println("estamos permitiendo declaracion multiple de atributos")}
-   	;
+        : declaracion_var
+        | enum
+        | PRIVATE enum
+        | PRIVATE declaracion_var {System.out.println("estamos permitiendo declaracion multiple de atributos")}
+        ;
 	
    friendly
-	: FRIEND ID
-	;
+        : FRIEND ID
+        ;
    herencia
-	: EXTENDS lista_de_variables
-	;
+        : EXTENDS lista_de_variables
+        ;
 
    declaracion_var
-	: tipo lista_de_variables
-	| tipo ID
-	;
+        : tipo lista_de_variables
+        | tipo ID
+        ;
    
    lista_de_variables
-	: ID
-	| ID ',' lista_de_variables
-	;
+        : ID
+        | ID ',' lista_de_variables
+        ;
    lista_valores
-	: cte
-	| cte ',' lista_valores
-	;
+        : cte
+        | cte ',' lista_valores
+        ;
 	
    tipo	
-	: UNINTEGER
-	| DOUBLEF
-	;
+        : UNINTEGER
+        | DOUBLEF
+        ;
    funcion 
-	: tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
-   	| AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
-   	;
+        : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
+        | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
+        ;
    parametros_formales
-	: tipo ID
-	| tipo ID ',' parametros_formales
-	;
+        : tipo ID
+        | tipo ID ',' parametros_formales
+        ;
    invocacion_funcion
-	: ID '(' parametros_reales ')'
-	;
+        : ID '(' parametros_reales ')'
+        ;
    parametros_reales
-	: expr_asig
-	| expr_asig ',' parametros_reales
-	;
+        : expr_asig
+        | expr_asig ',' parametros_reales
+        ;
    retorno
-	: RET '(' expr ')'
-	;
+        : RET '(' expr ')'
+        ;
    print
-	: POUT '(' expr ')'
-	| POUT '(' cadena ')'
-	;
+        : POUT '(' expr ')'
+        | POUT '(' cadena ')'
+        ;
    cadena
-	: '‘' STRING '’'
-	;
+        : '‘' STRING '’'
+        ;
    enum
-	: TYPEDEF ID '=' '[' lista_valores ']'
-	;
+        : TYPEDEF ID '=' '[' lista_valores ']'
+        ;
    while_repeat
-	: WHILE '(' comp ')' REPEAT bloque_ejecutable
-	| WHILE '(' comp ')' REPEAT sentencia_ejecutable
-	;
+        : WHILE '(' comp ')' REPEAT bloque_ejecutable
+        | WHILE '(' comp ')' REPEAT sentencia_ejecutable
+        ;
    comp
-	: expr '<' expr {System.out.println(“Es una comparacion <”)}
-	| expr '>' expr {System.out.println(“Es una comparacion >”)}
-	| expr MAYOR_IGUAL expr {System.out.println(“Es una comparacion >=”)}
-	| expr MENOR_IGUAL expr {System.out.println(“Es una comparacion <=”)}
-	| expr DISTINTO expr {System.out.println(“Es una desigualdad”)}
-	| expr IGUALDAD expr {System.out.println(“Es una igualdad”)}
-	;
+        : expr_asig '<' expr_asig {System.out.println(“Es una comparacion <”)}
+        | expr_asig '>' expr_asig {System.out.println(“Es una comparacion >”)}
+        | expr_asig MAYOR_IGUAL expr_asig {System.out.println(“Es una comparacion >=”)}
+        | expr_asig MENOR_IGUAL expr_asig {System.out.println(“Es una comparacion <=”)}
+        | expr_asig DISTINTO expr_asig {System.out.println(“Es una desigualdad”)}
+        | expr_asig IGUALDAD expr_asig {System.out.println(“Es una igualdad”)}
+        ;
 
 
     assign 
         : ID OP_ASSIGN expr_asig 
-	{System.out.println(“Es una asignación con := ”)}
+	    {System.out.println(“Es una asignación con := ”)}
         |  ID '=' expr
-	{System.out.println(“Es una asignación con = ”)}
-	;
+        {System.out.println(“Es una asignación con = ”)}
+        ;
 
     expr_asig
         : expr
