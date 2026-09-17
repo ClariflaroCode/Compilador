@@ -96,6 +96,7 @@
    tipo	
         : UNINTEGER
         | DOUBLEF
+        | ID
         ;
    funcion 
         : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
