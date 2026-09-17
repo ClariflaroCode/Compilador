@@ -8,18 +8,17 @@
     %token IF, ELSE, END_IF, BEGIN, END, POUT, RET, CLASS, FUNCTION
 
     %%
-   if
-    	: IF '(' comp ')' bloque_ejecutable END_IF
-    	| IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF 
-        | IF '(' comp ')' sentencia_ejecutable END_IF
-        | IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF
-        | IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF
-        | IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF
-        ;
-
    programa
         : ID sentencias_declarativas bloque_ejecutable
         ;
+   if
+          : IF '(' comp ')' bloque_ejecutable END_IF
+          | IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF 
+          | IF '(' comp ')' sentencia_ejecutable END_IF
+          | IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF
+          | IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF
+          | IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF
+          ;
 
    bloque_ejecutable
         : BEGIN sentencias_ejecutables END
@@ -69,7 +68,7 @@
         : declaracion_var
         | enum
         | PRIVATE enum
-        | PRIVATE declaracion_var {System.out.println("estamos permitiendo declaracion multiple de atributos")}
+        | PRIVATE declaracion_var {System.out.println("estamos permitiendo declaracion multiple de atributos");}
         ;
 	
    friendly
@@ -131,47 +130,48 @@
         | WHILE '(' comp ')' REPEAT sentencia_ejecutable
         ;
    comp
-        : expr_asig '<' expr_asig {System.out.println(“Es una comparacion <”)}
-        | expr_asig '>' expr_asig {System.out.println(“Es una comparacion >”)}
-        | expr_asig MAYOR_IGUAL expr_asig {System.out.println(“Es una comparacion >=”)}
-        | expr_asig MENOR_IGUAL expr_asig {System.out.println(“Es una comparacion <=”)}
-        | expr_asig DISTINTO expr_asig {System.out.println(“Es una desigualdad”)}
-        | expr_asig IGUALDAD expr_asig {System.out.println(“Es una igualdad”)}
+        : expr_asig '<' expr_asig {System.out.println("Es una comparacion <");}
+        | expr_asig '>' expr_asig {System.out.println("Es una comparacion >");}
+        | expr_asig MAYOR_IGUAL expr_asig {System.out.println("Es una comparacion >=");}
+        | expr_asig MENOR_IGUAL expr_asig {System.out.println("Es una comparacion <=");}
+        | expr_asig DISTINTO expr_asig {System.out.println("Es una desigualdad");}
+        | expr_asig IGUALDAD expr_asig {System.out.println("Es una igualdad");}
         ;
 
 
     assign 
         : ID OP_ASSIGN expr_asig 
-	    {System.out.println(“Es una asignación con := ”)}
+	    {System.out.println("Es una asignación con := ");}
         |  ID '=' expr
-        {System.out.println(“Es una asignación con = ”)}
+        {System.out.println("Es una asignación con = ");}
         ;
 
     expr_asig
         : expr
         | expr "=" expr
+        ;
 
     expr
         : expr '+' term
-            { System.out.print(“Es una suma de los valores: “ , $1, “ y ” , $2)}
+            { System.out.println("Es una suma de los valores: " + $1+ " y " + $2);}
         | expr '-' term
-            { System.out.print(“Es una resta de los valores: “ , $1, “ y ” , $2)}
+            { System.out.println("Es una resta de los valores: " + $1+ " y " + $2);}
         | term
-            { System.out.println(“Es un término”)}
+            { System.out.println("Es un término");}
         ;
 
     term
         : term '/' factor
-            { System.out.print(“Es una división de los valores: “ , $1, “ y ” , $2”)}
+            { System.out.println("Es una división de los valores: " +$1+ " y " + $2);}
         | term '*' factor
-            { System.out.print(“Es una multiplicación de los valores: “ , $1, “ y ” , $2”)}
+            { System.out.println("Es una multiplicación de los valores: " + $1+ " y " + $2);}
         | factor
-            { System.out.print(“Es un factor”)}
+            { System.out.println("Es un factor");}
         ;
 
     factor
         : variable
-                { System.out.println(“Es un id”)}
+                { System.out.println("Es un id");}
         | cte
         | invocacion_funcion
         ;
@@ -186,7 +186,7 @@
         ;
 %%
 
-static Lex lex = null;
+static Lexer lex = null;
 
 static Parser par = null;
 
