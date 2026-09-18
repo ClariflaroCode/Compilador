@@ -323,6 +323,12 @@ public class Lexer {
             
             lexema=accionesSemanticas.get(transicion).aplicarAccion(lexema, simbolo);
         }
+        if (estadoActual == 9 || estadoActual == 10) { //solo nos metemos a este if si estamos en el final del archivo. 
+            //habría que revisar que el lexema sea una de las palabras reservadas. 
+            if (lexema.toLowerCase().equals("end")) {
+                tokenOutput = tokens.get("end");
+            }
+        }
         token.token = tokenOutput;
         System.out.println("Imprimiendo token: " +token.token);
         token.lexema = lexema;
