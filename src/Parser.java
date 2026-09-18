@@ -483,9 +483,9 @@ System.out.println("Fin compilación");
 }
 
 int yylex () {
-        int token = lex.getToken();
-        yylval = new ParserVal(lex.punteroTS);
-        return token;
+        Token token = Lexer.getToken();
+        yylval = new ParserVal(token.getLexema());
+        return token.getToken();
 }
 
 void yyerror (String s){

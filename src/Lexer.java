@@ -2,7 +2,9 @@
 /*Asumimos que el estado final es el ESTADO_FINAL
  Una celda invalida esta representada con un TRANSICION_INVALIDA
 */
-
+//import Parser;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,8 +50,13 @@ public class Lexer {
    // private static Map<String, Integer> tablaSimbolos;
     private static String sourceCode;
 
-    public Lexer() {
-    
+
+    public Lexer(String path) {
+            this.recibirPath(path);
+        
+			//String path ="src/codigo.txt";
+			
+			//lexLuthor.recibirPath(path);
         tokens = Map.ofEntries(
                 Map.entry("if", 257),
                 Map.entry("else", 258),
@@ -84,6 +91,7 @@ public class Lexer {
         construyeAccionesSemanticas();
 
     }
+
     public void recibirPath(String path){ 
         try {
     		sourceCode = Files.readString(Path.of(path));
@@ -131,7 +139,19 @@ public class Lexer {
     				tokenOutput=tokens.get("cte_double");
     				return as4.aplicarAccion(lexema, entrada);
     			};
+                AccionSemantica as14=(lexema,entrada)->{
+                    lexema = lexema+entrada;
+                    indexFile--;
+                    //Parser.yylval = new ParserVal(lexema);
+                    tokenOutput = tokens.get("cte_entera");
+                    return lexema;
+                };
 
+                AccionSemantica as15=(lexema,entrada)->{
+                    //Parser.yylval = new ParserVal(lexema);
+                    tokenOutput = tokens.get("string");
+                    return lexema;
+                };
 
     			AccionSemantica as17=(lexema,entrada)->{
     				Integer esteToken = tokens.get(lexema.toLowerCase());
@@ -165,7 +185,7 @@ public class Lexer {
     			accionesSemanticas.put("e1e1", as2);
     			accionesSemanticas.put("e1e2", as2);
     			accionesSemanticas.put("e2e3",as2);
-    			accionesSemanticas.put("e3e17", as2);
+    			accionesSemanticas.put("e3e17", as14);
     			//accionesSemanticas.put("e3e17",as2);
     			accionesSemanticas.put("e0e4",as12);
     			accionesSemanticas.put("e1e4",as13);//4
@@ -275,7 +295,8 @@ public class Lexer {
         }
     }
 
-    public static int yylex() {
+    public static Token getToken() {
+        Token token = new Token();
     	tokenOutput = -1;
         String lexema = "";
         ArrayList<Integer> estadosPasados = new ArrayList<>();
@@ -294,13 +315,16 @@ public class Lexer {
             if (estadoActual == TRANSICION_INVALIDA) {
             //    String error = detectarError(estadosPasados.get(estadosPasados.size()-1));
              //   System.out.println(error);
-                return -1;
+                token.setToken(-1);
+                return token;
             }
             //System.out.println(indexFile);
             
             lexema=accionesSemanticas.get(transicion).aplicarAccion(lexema, simbolo);
         }
-        return tokenOutput;
+        token.token = tokenOutput;
+        token.lexema = lexema;
+        return token;
     }
     public static String detectarError(ArrayList<Integer> estadosPasados) {
         String error = "";
