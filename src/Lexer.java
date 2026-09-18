@@ -23,15 +23,15 @@ public class Lexer {
     private static int tokenOutput;
 
     private static final int[][] matriz_transiciones = {
-            {13, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, 15, 15, 15},
+            {13, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, ESTADO_FINAL, 15, 15, 15},
             {14, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
             {TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 16, 0},
-            {9, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, 6, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
+            {9, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, 6, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, 9, 10, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
             {11, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, 13, TRANSICION_INVALIDA, 15, 15},
             {12, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
             {11, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
-            {9, 3, 3, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
-            {9, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
+            {9, 3, 3, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, 9, 10, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
+            {9, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, 9, 10, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
             {TRANSICION_INVALIDA, 2, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
             {ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, 7, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
             {ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, TRANSICION_INVALIDA, TRANSICION_INVALIDA, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, ESTADO_FINAL, TRANSICION_INVALIDA, 13, TRANSICION_INVALIDA, 15, 15},
@@ -58,33 +58,33 @@ public class Lexer {
 			
 			//lexLuthor.recibirPath(path);
         tokens = Map.ofEntries(
-                Map.entry("if", 257),
-                Map.entry("else", 258),
-                Map.entry("end_if", 259),
-                Map.entry("begin", 260),
-                Map.entry("end", 261),
-                Map.entry("pout", 262),
-                Map.entry("rec", 263),
-                Map.entry("class", 264),
-                Map.entry("function", 265),
-                Map.entry("id", 266),
-                Map.entry("cte_entera", 267),
-                Map.entry("cte_double", 268),
-                Map.entry(">=", 269),
-                Map.entry("<=", 270),
-                Map.entry("!=", 271),
-                Map.entry("==", 272),
-                Map.entry(":=", 273),
-                Map.entry("string", 274),
-                Map.entry("while", 275),
-                Map.entry("repeat", 276),
-                Map.entry("auto", 277),
-                Map.entry("typedef", 278),
-                Map.entry("friend", 279),
-                Map.entry("private", 280),
-                Map.entry("extends", 281),
-                Map.entry("uninteger", 282),
-                Map.entry("doublef", 283)
+                Map.entry("if", (int)Parser.IF),
+                Map.entry("else", (int)Parser.ELSE),
+                Map.entry("end_if", (int)Parser.END_IF),
+                Map.entry("begin", (int)Parser.BEGIN),
+                Map.entry("end", (int)Parser.END),
+                Map.entry("pout", (int)Parser.POUT),
+                Map.entry("ret", (int)Parser.RET),
+                Map.entry("class", (int)Parser.CLASS),
+                Map.entry("function", (int)Parser.FUNCTION),
+                Map.entry("id", (int)Parser.ID),
+                Map.entry("cte_entera",(int) Parser.CTE_ENTERA),
+                Map.entry("cte_double", (int)Parser.CTE_DOUBLE),
+                Map.entry(">=", (int)Parser.MAYOR_IGUAL),
+                Map.entry("<=", (int)Parser.MENOR_IGUAL),
+                Map.entry("!=", (int)Parser.DISTINTO),
+                Map.entry("==", (int)Parser.IGUALDAD),
+                Map.entry(":=", (int)Parser.OP_ASSIGN),
+                Map.entry("string", (int)Parser.STRING),
+                Map.entry("while", (int)Parser.WHILE),
+                Map.entry("repeat", (int)Parser.REPEAT),
+                Map.entry("auto", (int)Parser.AUTO),
+                Map.entry("typedef", (int)Parser.TYPEDEF),
+                Map.entry("friend", (int)Parser.FRIEND),
+                Map.entry("private", (int)Parser.PRIVATE),
+                Map.entry("extends", (int)Parser.EXTENDS),
+                Map.entry("uninteger", (int)Parser.UNINTEGER),
+                Map.entry("doublef", (int)Parser.DOUBLEF)
         );
         construyeFilaSimbolos();
     //    tablaSimbolos = Map.ofEntries(null);
@@ -141,7 +141,7 @@ public class Lexer {
     			};
                 AccionSemantica as14=(lexema,entrada)->{
                     lexema = lexema+entrada;
-                    indexFile--;
+                    //indexFile--;
                     //Parser.yylval = new ParserVal(lexema);
                     tokenOutput = tokens.get("cte_entera");
                     return lexema;
@@ -211,6 +211,7 @@ public class Lexer {
     			accionesSemanticas.put("e12e17",as19);
     			accionesSemanticas.put("e0e13", as8);
     			accionesSemanticas.put("e13e13",as2);
+                accionesSemanticas.put("e13e17",as15);
     			accionesSemanticas.put("e0e17", as20);
     			accionesSemanticas.put("e0e0",as9);
     			accionesSemanticas.put("e0e14",as10);
@@ -323,7 +324,9 @@ public class Lexer {
             lexema=accionesSemanticas.get(transicion).aplicarAccion(lexema, simbolo);
         }
         token.token = tokenOutput;
+        System.out.println("Imprimiendo token: " +token.token);
         token.lexema = lexema;
+        System.out.println("Imprimiendo lexema: " + token.lexema);
         return token;
     }
     public static String detectarError(ArrayList<Integer> estadosPasados) {

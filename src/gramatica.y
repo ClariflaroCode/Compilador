@@ -9,7 +9,7 @@
 
     %%
    programa
-        : ID sentencias_declarativas bloque_ejecutable
+        : ID sentencias_declarativas bloque_ejecutable {System.out.println("Es un programa");}
         ;
    if
           : IF '(' comp ')' bloque_ejecutable END_IF
@@ -21,26 +21,26 @@
           ;
 
    bloque_ejecutable
-        : BEGIN sentencias_ejecutables END
+        : BEGIN sentencias_ejecutables END {System.out.println("Es un bloque ejecutable");}
         ;
    sentencias_ejecutables
-        : sentencia_ejecutable
-        | sentencia_ejecutable sentencias_ejecutables
+        : sentencia_ejecutable {System.out.println("Es una sentencia ejecutablesss");}
+        | sentencia_ejecutable sentencias_ejecutables {System.out.println("Es una sentencia ejecutablesss");}
         ;
    sentencia_ejecutable
-        : assign ';' 
+        : assign ';' {System.out.println("Es una sentencia ejecutable");}
         | if ';'
         | while_repeat ';'
         | retorno ';'
-        | print ';'
+        | print ';' {System.out.println("Es una sentencia ejecutable");}
         ;
 	
    sentencias_declarativas
-        : sentencia_declarativa
-        | sentencia_declarativa sentencias_declarativas
+        : sentencia_declarativa {System.out.println("Es una sentencia declarativas");}
+        | sentencia_declarativa sentencias_declarativas {System.out.println("Es una sentencia declarativas");}
         ;
    sentencia_declarativa
-        : declaracion_var ';'
+        : declaracion_var ';'  {System.out.println("Es una sentencia declarativa");}
         | funcion ';'
         | clase ';'
         | enum ';'
@@ -115,13 +115,14 @@
    retorno
         : RET '(' expr ')'
         ;
+   cadena
+        : STRING {System.out.println("Es una cadena");}
+        ;
    print
         : POUT '(' expr ')'
-        | POUT '(' cadena ')'
+        | POUT '(' cadena ')' {System.out.println("es una cadena que se imprime");}
         ;
-   cadena
-        : '‘' STRING '’'
-        ;
+
    enum
         : TYPEDEF ID '=' '[' lista_valores ']'
         ;
@@ -147,8 +148,8 @@
         ;
 
     expr_asig
-        : expr
-        | expr "=" expr
+        : expr {System.out.println("Es una expr");}
+        | expr "=" expr  {System.out.println("Es una asignacion de expr");}
         ;
 
     expr
@@ -171,18 +172,18 @@
 
     factor
         : variable
-                { System.out.println("Es un id");}
-        | cte
-        | invocacion_funcion
+                { System.out.println("Es un factor");}
+        | cte  {System.out.println("Es un cte factor");}
+        | invocacion_funcion {System.out.println("Es una invocacion_funcion factor");}
         ;
     variable
-        : ID 
-        | ID '.' ID
-        | ID '.' invocacion_funcion
+        : ID  {System.out.println("Es un variable");}
+        | ID '.' ID  {System.out.println("Es un atributo");}
+        | ID '.' invocacion_funcion {System.out.println("Es un acceso a metodo");}
 
     cte
-        : CTE_ENTERA
-        | CTE_DOUBLE
+        : CTE_ENTERA {System.out.println("Detecte un entero");}
+        | CTE_DOUBLE {System.out.println("Es un double");}
         ;
 %%
 
@@ -204,9 +205,9 @@ System.out.println("Fin compilación");
 }
 
 int yylex () {
-        int token = lex.getToken();
-        yylval = new ParserVal(lex.punteroTS);
-        return token;
+        Token megaToken= lex.getToken();
+        yylval = new ParserVal(megaToken.lexema);
+        return megaToken.token;
 }
 
 void yyerror (String s){

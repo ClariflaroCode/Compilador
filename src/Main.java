@@ -13,17 +13,25 @@ public class Main {
 			BufferedReader entrada =  new BufferedReader(new InputStreamReader(System.in));
 			String path = String.valueOf(entrada.readLine());
 			//String path ="src/codigo.txt";
-			Lexer lexLuthor = new Lexer();
+			Lexer lexLuthor = new Lexer(path);
 			lexLuthor.recibirPath(path);
+			/* 
 			int token=0;
 			while (token!=-1) { //ESTO HABRIA QUE PASARLO AL PARSER CREO
-				token = Lexer.getToken();
+				token = Lexer.getToken().token;
 			
-				System.out.println(token.getToken());
-				/*t.setToken(t.getToken()-1);
-				token = t.getToken();*/
+				System.out.println(token);
+				System.out.println("-------------------------------");
+				t.setToken(t.getToken()-1);
+				token = t.getToken();
 
-			};
+			}*/
+			
+			
+			Parser p  = new Parser();
+			int e = p.yyparse();
+			System.out.println("imprimi esto " + e);
+			
 			
 		} catch (Exception e) {
 			System.out.print(e);
