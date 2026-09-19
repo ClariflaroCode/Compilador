@@ -1,0 +1,1 @@
+darkrai UNINTEGER FUNCTION combatir(UNINTEGER zorua, UNINTEGER ) BEGIN pout('entei');END; BEGIN pout('suicune'); END

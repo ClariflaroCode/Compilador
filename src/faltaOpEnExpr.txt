@@ -1,0 +1,1 @@
+charizard UNINTEGER a, b, c; BEGIN c:= +b;END

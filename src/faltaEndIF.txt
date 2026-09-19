@@ -1,0 +1,1 @@
+luna UNINTEGER a,b,c; BEGIN if (a < c) b:=c; END

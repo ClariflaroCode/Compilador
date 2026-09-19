@@ -1,0 +1,1 @@
+UNINTEGER a;BEGIN pout('hola mundo');END
