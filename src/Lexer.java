@@ -107,9 +107,16 @@ public class Lexer {
     			AccionSemantica as2 = (lexema,entrada)->{return lexema+entrada;};
     			AccionSemantica as3 = (lexema,entrada)->{return "0"+entrada;};
     			AccionSemantica as4 = (lexema,entrada)->{indexFile--;
-    			return lexema;};
+					if (tablaSimbolos.containsKey(lexema)) {
+                    	tablaSimbolos.put(lexema,tokenOutput);
+                    }
+    				return lexema;};
     			AccionSemantica as5 = (lexema,entrada)->{indexFile--;
-    			return lexema+"d+1";};
+    				lexema = lexema+"d+1";
+					if (tablaSimbolos.containsKey(lexema)) {
+                    	tablaSimbolos.put(lexema,tokenOutput);
+                    }
+					return lexema;};
     			AccionSemantica as6 = (lexema,entrada)->{return lexema+"+"+entrada;};
     			AccionSemantica as7 = (lexema,entrada)->{if (entrada=='=') {
     				tokenOutput = tokens.get(lexema+entrada);
@@ -143,6 +150,9 @@ public class Lexer {
                     lexema = lexema+entrada;
                     //indexFile--;
                     //Parser.yylval = new ParserVal(lexema);
+					if (tablaSimbolos.containsKey(lexema)) {
+                    	tablaSimbolos.put(lexema,tokenOutput);
+                    }
                     tokenOutput = tokens.get("cte_entera");
                     return lexema;
                 };
@@ -150,6 +160,9 @@ public class Lexer {
                 AccionSemantica as15=(lexema,entrada)->{
                     //Parser.yylval = new ParserVal(lexema);
                     tokenOutput = tokens.get("string");
+					if (tablaSimbolos.containsKey(lexema)) {
+                    	tablaSimbolos.put(lexema,tokenOutput);
+                    }
                     return lexema;
                 };
 
@@ -160,6 +173,9 @@ public class Lexer {
     				else {
     					//Agregar a tabla de simbolos y
     					tokenOutput = tokens.get("id");
+						if (tablaSimbolos.containsKey(lexema)) {
+                    		tablaSimbolos.put(lexema,tokenOutput);
+                    	}
     				}
     				return as4.aplicarAccion(lexema, entrada);
     			};
