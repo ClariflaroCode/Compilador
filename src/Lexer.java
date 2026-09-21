@@ -113,7 +113,8 @@ public class Lexer {
     				return lexema;};
     			AccionSemantica as5 = (lexema,entrada)->{indexFile--;
     				lexema = lexema+"d+1";
-					return as4(lexema,entrada);
+					return as4.aplicarAccion(lexema,entrada);
+                };
     			AccionSemantica as6 = (lexema,entrada)->{return lexema+"+"+entrada;};
     			AccionSemantica as7 = (lexema,entrada)->{if (entrada=='=') {
     				tokenOutput = tokens.get(lexema+entrada);
@@ -199,7 +200,7 @@ public class Lexer {
     				tokenOutput = entrada;
     				return ""+entrada;
     			};
-                AccionSemantica as21= (lexema,entrada)->{
+                AccionSemantica as21=(lexema,entrada)->{
                     indexFile--;
                     System.out.println("Warning: Constante entera sin sufijo");
                     lexema = lexema+"$ui";
@@ -207,31 +208,32 @@ public class Lexer {
                     	tablaSimbolos.put(lexema,tokenOutput);
                     }
                     tokenOutput = tokens.get("cte_entera");
+                    return lexema; //
                 };
                 AccionSemantica as22=(lexema,entrada)->{
                     lexema=lexema+"$";
                     System.out.println("Warning: falta $ en constante entera");
-                    return as2(lexema,entrada);
+                    return as2.aplicarAccion(lexema,entrada);
                 };
                 AccionSemantica as23=(lexema,entrada)->{
                     System.out.println("Warning: falta ui en constante entera");
                     lexema=lexema+"ui";
-                    return as4(lexema,entrada);
+                    return as4.aplicarAccion(lexema,entrada);
                 };
                 AccionSemantica as24=(lexema,entrada)->{
                     System.out.println("Warning: falta parte decimal en constante flotante");
                     lexema=lexema+"0";
-                    return as5(lexema,entrada);
+                    return as5.aplicarAccion(lexema,entrada);
                 };
                 AccionSemantica as25 = (lexema,entrada)->{
                     System.out.println("Warning: pontencia incompleta en constante flotante");
                     lexema = lexema+"+1";
-                    return as4(lexema,entrada);
+                    return as4.aplicarAccion(lexema,entrada);
                 };
                 AccionSemantica as26 = (lexema,entrada)->{
                     System.out.println("Warning: pontencia incompleta en constante flotante");
                     lexema = lexema +"1";
-                    return as4(lexema,entradda);
+                    return as4.aplicarAccion(lexema,entrada);
                 };
     			accionesSemanticas = new HashMap<String,AccionSemantica>();
     			accionesSemanticas.put("e0e1", as11);
