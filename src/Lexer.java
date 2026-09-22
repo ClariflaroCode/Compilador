@@ -1,4 +1,3 @@
-package src;
 /*Asumimos que el estado final es el ESTADO_FINAL
  Una celda invalida esta representada con un TRANSICION_INVALIDA
 */
