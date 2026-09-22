@@ -1,5 +1,5 @@
 programaaa UNINTEGER ahggghfghfghfghf,r;
 UNINTEGER b;
-BEGIN a:=1$ui;
+BEGIN a:=1$;
 pout('holis');
 END
