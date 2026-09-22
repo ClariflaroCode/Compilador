@@ -1,1 +1,4 @@
-blastoise UNINTEGER a, b, c; BEGIN c:= a b;END
+blastoise 
+UNINTEGER a, b, c; 
+BEGIN c:= a b;
+END

@@ -1,5 +1,6 @@
 programaaa UNINTEGER ahggghfghfghfghf,r;
 UNINTEGER b;
 BEGIN a:=1$;
+a:= b + a;
 pout('holis');
 END

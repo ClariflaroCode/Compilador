@@ -127,7 +127,7 @@ public class Lexer {
     			AccionSemantica as8 = (lexema,entrada)->{
     				tokenOutput = tokens.get("string");
     				return "";};
-    			AccionSemantica as9 = (lexema,entrada)->{if (entrada=='\n')
+    			AccionSemantica as9 = (lexema,entrada)->{if (entrada=='\n' || entrada == '\r')
     				line ++;
     			return "";};
     			AccionSemantica as10=(lexema,entrada)->{return "";};
@@ -314,6 +314,7 @@ public class Lexer {
 
         filaSimbolos.put(" ",13);
         int asciiTab = 9;
+        
         filaSimbolos.put(String.valueOf((char)asciiTab),13);
 
 
@@ -339,8 +340,10 @@ public class Lexer {
         filaSimbolos.put("d",3);
         filaSimbolos.put("u",7);
         filaSimbolos.put("i",8);
-        int asciiSaltoLinea = 10;
+        int asciiSaltoLinea = 10; // /n
+        int asciiSaltoLinea2 = 13; // /r
         filaSimbolos.put(String.valueOf((char)asciiSaltoLinea),14);
+        filaSimbolos.put(String.valueOf((char)asciiSaltoLinea2),14);
 
     }
     public int devuelveTokenLexema(String lexema) {

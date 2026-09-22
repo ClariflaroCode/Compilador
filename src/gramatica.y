@@ -22,28 +22,32 @@
           ;
 
    bloque_ejecutable
-        : BEGIN sentencias_ejecutables END {System.out.println("Es un bloque ejecutable");}
+        : BEGIN sentencias_ejecutables END 
+        | sentencias_ejecutables END {yyerror("Error sintactico: Falta el BEGIN");}
+        | BEGIN sentencias_ejecutables {yyerror("Errror sintactico: Falta el END");}
         ;
    sentencias_ejecutables
-        : sentencia_ejecutable {System.out.println("Es una sentencia ejecutablesss");}
-        | sentencia_ejecutable sentencias_ejecutables {System.out.println("Es una sentencia ejecutablesss");}
+        : sentencia_ejecutable 
+        | sentencia_ejecutable sentencias_ejecutables 
         ;
    sentencia_ejecutable
-        : assign ';' {System.out.println("Es una sentencia ejecutable");}
+        : assign ';' 
         | if ';'
         | while_repeat ';'
-        | print ';' {System.out.println("Es una sentencia ejecutable");}
+        | print ';' 
+        | error ';' {yyerrflag=0;}
         ;
 
    sentencias_declarativas
-        : sentencia_declarativa {System.out.println("Es una sentencia declarativas");}
-        | sentencia_declarativa sentencias_declarativas {System.out.println("Es una sentencia declarativas");}
+        : sentencia_declarativa 
+        | sentencia_declarativa sentencias_declarativas 
         ;
    sentencia_declarativa
-        : declaracion_var ';'  {System.out.println("Es una sentencia declarativa");}
+        : declaracion_var ';'  
         | funcion ';'
         | clase ';'
         | enum ';'
+        | error ';' {yyerrflag=0;}
         ;
    clase
         : CLASS ID BEGIN cuerpo_clase END
@@ -191,7 +195,7 @@
         ;
 
     expr_asig
-        : expr {System.out.println("Es una expr");}
+        : expr 
         | expr "=" expr  {System.out.println("Es una asignacion de expr");}
         ;
 
@@ -200,8 +204,11 @@
             { System.out.println("Es una suma de los valores: " + $1+ " y " + $2);}
         | expr '-' term
             { System.out.println("Es una resta de los valores: " + $1+ " y " + $2);}
+        | expr term {yyerror("Error sintactico: Falta operador en expresión");}
+        | expr '+' error { yyerror("Error sintactico: Falta operando en expr");}
+        | expr '-' error { yyerror("Error sintactico: Falta operando en expr");}
         | term
-            { System.out.println("Es un término");}
+            
         ;
 
     term
@@ -210,23 +217,22 @@
         | term '*' factor
             { System.out.println("Es una multiplicación de los valores: " + $1+ " y " + $2);}
         | factor
-            { System.out.println("Es un factor");}
         ;
 
     factor
-        : variable
-                { System.out.println("Es un factor");}
-        | cte  {System.out.println("Es un cte factor");}
-        | invocacion_funcion {System.out.println("Es una invocacion_funcion factor");}
+        : variable             
+        | cte  
+        | invocacion_funcion 
         ;
     variable
-        : ID  {System.out.println("Es un variable");}
+        : ID  
         | ID '.' ID  {System.out.println("Es un atributo");}
         | ID '.' invocacion_funcion {System.out.println("Es un acceso a metodo");}
+        ;
 
     cte
-        : CTE_ENTERA {System.out.println("Detecte un entero");}
-        | CTE_DOUBLE {System.out.println("Es un double");}
+        : CTE_ENTERA 
+        | CTE_DOUBLE 
         ;
 %%
 
