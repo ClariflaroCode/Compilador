@@ -1,1 +1,5 @@
-programaaa UNINTEGER ahggghfghfghfghf,r; UNINTEGER b;BEGIN a:=1$ui; pout('holis'); END
+programaaa UNINTEGER ahggghfghfghfghf,r;
+UNINTEGER b;
+BEGIN a:=1$ui;
+pout('holis');
+END
