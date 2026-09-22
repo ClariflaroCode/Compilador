@@ -12,21 +12,8 @@ public class Main {
 		try {
 			BufferedReader entrada =  new BufferedReader(new InputStreamReader(System.in));
 			String path = String.valueOf(entrada.readLine());
-			//String path ="src/codigo.txt";
 			Lexer lexLuthor = new Lexer(path);
 			lexLuthor.recibirPath(path);
-			/* 
-			int token=0;
-			while (token!=-1) { //ESTO HABRIA QUE PASARLO AL PARSER CREO
-				token = Lexer.getToken().token;
-			
-				System.out.println(token);
-				System.out.println("-------------------------------");
-				t.setToken(t.getToken()-1);
-				token = t.getToken();
-
-			}*/
-			
 			
 			Parser p  = new Parser();
 			int e = p.yyparse();

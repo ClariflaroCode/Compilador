@@ -1,0 +1,1 @@
+togepi UNINTEGER a; CLASS h BEGIN EXTENDS;  END; BEGIN pout('flareon'); END

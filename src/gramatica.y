@@ -117,6 +117,7 @@
         ;
    herencia
         : EXTENDS lista_de_variables
+        | EXTENDS error {yyerror("Error sintactico: ausencia de nombre o lista de clases");}
         ;
 
    declaracion_var
