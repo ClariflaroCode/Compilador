@@ -87,7 +87,7 @@ public class Lexer {
                 Map.entry("doublef", (int)Parser.DOUBLEF)
         );
         construyeFilaSimbolos();
-    //    tablaSimbolos = Map.ofEntries(null);
+        tablaSimbolos =  new HashMap<>();
         construyeAccionesSemanticas();
 
     }

@@ -11,7 +11,7 @@
    programa
         : ID sentencias_declarativas bloque_ejecutable {System.out.println("Es un programa");}
         ;
-   if
+    if
           : IF '(' comp ')' bloque_ejecutable END_IF
           | IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF 
           | IF '(' comp ')' sentencia_ejecutable END_IF
@@ -31,10 +31,9 @@
         : assign ';' {System.out.println("Es una sentencia ejecutable");}
         | if ';'
         | while_repeat ';'
-        | retorno ';'
         | print ';' {System.out.println("Es una sentencia ejecutable");}
         ;
-	
+
    sentencias_declarativas
         : sentencia_declarativa {System.out.println("Es una sentencia declarativas");}
         | sentencia_declarativa sentencias_declarativas {System.out.println("Es una sentencia declarativas");}
@@ -61,10 +60,51 @@
         ;
 	
    metodo
-        : PRIVATE funcion {System.out.println("estamos admitiendo metodos con auto");}
-        | funcion
+        : PRIVATE tipo ID '(' parametros_formales ')' sentencias_declarativas bloque_func
+        | PRIVATE AUTO  ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
+        | tipo ID '(' parametros_formales ')' sentencias_declarativas bloque_func
+        | AUTO ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
         ;
-   atributo
+     bloque_func
+        : bloque_retorno
+        | bloque_ejecutable
+        ;
+     bloque_retorno
+        : BEGIN sentencias_retornables END  
+        ;   
+     sentencias_func
+        : sent_func
+        | sentencias_func sent_func
+        ;
+     sentencias_retornables
+        : sentencia_retornable
+        | sentencias_func sentencia_retornable 
+        ;
+     sent_func
+        : sentencia_ejecutable
+        | sentencia_retornable
+        | if_func ';'
+        | while_repeat_func ';'
+        ;
+     sentencia_retornable
+        : retorno ';' {System.out.println("Soy una sent retornable");}
+        | if_retorno_seguro';' {System.out.println("Soy una sent retornable ");}
+        ;
+     if_retorno_seguro
+        : IF '(' comp ')' bloque_retorno ELSE bloque_retorno END_IF {System.out.println("Soy un if retornable");}
+        | IF '(' comp ')' retorno ELSE retorno END_IF {System.out.println("Soy un if retornable");}
+        | IF '(' comp ')' bloque_retorno ELSE retorno END_IF {System.out.println("Soy un if retornable");}
+        | IF '(' comp ')' retorno ELSE bloque_retorno END_IF {System.out.println("Soy un if retornable");}
+        ;
+     if_func
+        : IF '(' comp ')' bloque_func END_IF
+        | IF '(' comp ')' sent_func END_IF
+        ;
+     while_repeat_func
+        : WHILE '(' comp ')' REPEAT bloque_func
+        | WHILE '(' comp ')' REPEAT sent_func
+        ;
+    atributo
         : declaracion_var
         | enum
         | PRIVATE enum
@@ -99,7 +139,7 @@
         ;
    funcion 
         : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
-        | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
+        | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
         ;
    parametros_formales
         : tipo ID
