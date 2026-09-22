@@ -1,0 +1,2792 @@
+   0  $accept : programa $end
+
+   1  programa : ID sentencias_declarativas bloque_ejecutable
+   2           | error sentencias_declarativas bloque_ejecutable
+
+   3  if : IF '(' comp ')' bloque_ejecutable END_IF
+   4     | IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF
+   5     | IF '(' comp ')' sentencia_ejecutable END_IF
+   6     | IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF
+   7     | IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF
+   8     | IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF
+
+   9  bloque_ejecutable : BEGIN sentencias_ejecutables END
+
+  10  sentencias_ejecutables : sentencia_ejecutable
+  11                         | sentencia_ejecutable sentencias_ejecutables
+
+  12  sentencia_ejecutable : assign ';'
+  13                       | if ';'
+  14                       | while_repeat ';'
+  15                       | print ';'
+
+  16  sentencias_declarativas : sentencia_declarativa
+  17                          | sentencia_declarativa sentencias_declarativas
+
+  18  sentencia_declarativa : declaracion_var ';'
+  19                        | funcion ';'
+  20                        | clase ';'
+  21                        | enum ';'
+
+  22  clase : CLASS ID BEGIN cuerpo_clase END
+  23        | CLASS ID cuerpo_clase END
+
+  24  cuerpo_clase : sent_clase
+  25               | sent_clase cuerpo_clase
+
+  26  sent_clase : metodo ';'
+  27             | atributo ';'
+  28             | friendly ';'
+  29             | herencia ';'
+
+  30  metodo : PRIVATE tipo ID '(' parametros_formales ')' sentencias_declarativas bloque_func
+  31         | PRIVATE AUTO ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
+  32         | tipo ID '(' parametros_formales ')' sentencias_declarativas bloque_func
+  33         | AUTO ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
+
+  34  bloque_func : bloque_retorno
+  35              | bloque_ejecutable
+
+  36  bloque_retorno : BEGIN sentencias_retornables END
+
+  37  sentencias_func : sent_func
+  38                  | sentencias_func sent_func
+
+  39  sentencias_retornables : sentencia_retornable
+  40                         | sentencias_func sentencia_retornable
+
+  41  sent_func : sentencia_ejecutable
+  42            | sentencia_retornable
+  43            | if_func ';'
+  44            | while_repeat_func ';'
+
+  45  sentencia_retornable : retorno ';'
+  46                       | if_retorno_seguro ';'
+
+  47  if_retorno_seguro : IF '(' comp ')' bloque_retorno ELSE bloque_retorno END_IF
+  48                    | IF '(' comp ')' retorno ELSE retorno END_IF
+  49                    | IF '(' comp ')' bloque_retorno ELSE retorno END_IF
+  50                    | IF '(' comp ')' retorno ELSE bloque_retorno END_IF
+
+  51  if_func : IF '(' comp ')' bloque_func END_IF
+  52          | IF '(' comp ')' sent_func END_IF
+
+  53  while_repeat_func : WHILE '(' comp ')' REPEAT bloque_func
+  54                    | WHILE '(' comp ')' REPEAT sent_func
+
+  55  atributo : declaracion_var
+  56           | enum
+  57           | PRIVATE enum
+  58           | PRIVATE declaracion_var
+
+  59  friendly : FRIEND ID
+
+  60  herencia : EXTENDS lista_de_variables
+
+  61  declaracion_var : tipo lista_de_variables
+  62                  | tipo ID
+
+  63  lista_de_variables : ID
+  64                     | ID ',' lista_de_variables
+
+  65  lista_valores : cte
+  66                | cte ',' lista_valores
+
+  67  tipo : UNINTEGER
+  68       | DOUBLEF
+  69       | ID
+
+  70  funcion : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
+  71          | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
+
+  72  parametros_formales : tipo ID
+  73                      | tipo ID ',' parametros_formales
+
+  74  invocacion_funcion : ID '(' parametros_reales ')'
+
+  75  parametros_reales : expr_asig
+  76                    | expr_asig ',' parametros_reales
+
+  77  retorno : RET '(' expr ')'
+
+  78  cadena : STRING
+
+  79  print : POUT '(' expr ')'
+  80        | POUT '(' cadena ')'
+
+  81  enum : TYPEDEF ID '=' '[' lista_valores ']'
+
+  82  while_repeat : WHILE '(' comp ')' REPEAT bloque_ejecutable
+  83               | WHILE '(' comp ')' REPEAT sentencia_ejecutable
+
+  84  comp : expr_asig '<' expr_asig
+  85       | expr_asig '>' expr_asig
+  86       | expr_asig MAYOR_IGUAL expr_asig
+  87       | expr_asig MENOR_IGUAL expr_asig
+  88       | expr_asig DISTINTO expr_asig
+  89       | expr_asig IGUALDAD expr_asig
+
+  90  assign : ID OP_ASSIGN expr_asig
+  91         | ID '=' expr
+
+  92  expr_asig : expr
+  93            | expr '=' expr
+
+  94  expr : expr '+' term
+  95       | expr '-' term
+  96       | term
+
+  97  term : term '/' factor
+  98       | term '*' factor
+  99       | factor
+
+ 100  factor : variable
+ 101         | cte
+ 102         | invocacion_funcion
+
+ 103  variable : ID
+ 104           | ID '.' ID
+ 105           | ID '.' invocacion_funcion
+
+ 106  cte : CTE_ENTERA
+ 107      | CTE_DOUBLE
+
+state 0
+	$accept : . programa $end  (0)
+
+	error  shift 1
+	ID  shift 2
+	.  error
+
+	programa  goto 3
+
+
+state 1
+	programa : error . sentencias_declarativas bloque_ejecutable  (2)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 10
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 2
+	programa : ID . sentencias_declarativas bloque_ejecutable  (1)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 17
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 3
+	$accept : programa . $end  (0)
+
+	$end  accept
+
+
+state 4
+	tipo : ID .  (69)
+
+	.  reduce 69
+
+
+state 5
+	tipo : UNINTEGER .  (67)
+
+	.  reduce 67
+
+
+state 6
+	tipo : DOUBLEF .  (68)
+
+	.  reduce 68
+
+
+state 7
+	funcion : AUTO . FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (71)
+
+	FUNCTION  shift 18
+	.  error
+
+
+state 8
+	enum : TYPEDEF . ID '=' '[' lista_valores ']'  (81)
+
+	ID  shift 19
+	.  error
+
+
+state 9
+	clase : CLASS . ID BEGIN cuerpo_clase END  (22)
+	clase : CLASS . ID cuerpo_clase END  (23)
+
+	ID  shift 20
+	.  error
+
+
+state 10
+	programa : error sentencias_declarativas . bloque_ejecutable  (2)
+
+	BEGIN  shift 21
+	.  error
+
+	bloque_ejecutable  goto 22
+
+
+state 11
+	sentencias_declarativas : sentencia_declarativa .  (16)
+	sentencias_declarativas : sentencia_declarativa . sentencias_declarativas  (17)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	BEGIN  reduce 16
+
+	sentencias_declarativas  goto 23
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 12
+	sentencia_declarativa : declaracion_var . ';'  (18)
+
+	';'  shift 24
+	.  error
+
+
+state 13
+	sentencia_declarativa : funcion . ';'  (19)
+
+	';'  shift 25
+	.  error
+
+
+state 14
+	sentencia_declarativa : clase . ';'  (20)
+
+	';'  shift 26
+	.  error
+
+
+state 15
+	sentencia_declarativa : enum . ';'  (21)
+
+	';'  shift 27
+	.  error
+
+
+state 16
+	declaracion_var : tipo . lista_de_variables  (61)
+	declaracion_var : tipo . ID  (62)
+	funcion : tipo . FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable  (70)
+
+	ID  shift 28
+	FUNCTION  shift 29
+	.  error
+
+	lista_de_variables  goto 30
+
+
+state 17
+	programa : ID sentencias_declarativas . bloque_ejecutable  (1)
+
+	BEGIN  shift 21
+	.  error
+
+	bloque_ejecutable  goto 31
+
+
+state 18
+	funcion : AUTO FUNCTION . ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (71)
+
+	ID  shift 32
+	.  error
+
+
+state 19
+	enum : TYPEDEF ID . '=' '[' lista_valores ']'  (81)
+
+	'='  shift 33
+	.  error
+
+
+state 20
+	clase : CLASS ID . BEGIN cuerpo_clase END  (22)
+	clase : CLASS ID . cuerpo_clase END  (23)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 34
+	TYPEDEF  shift 8
+	FRIEND  shift 35
+	PRIVATE  shift 36
+	EXTENDS  shift 37
+	BEGIN  shift 38
+	.  error
+
+	declaracion_var  goto 39
+	enum  goto 40
+	cuerpo_clase  goto 41
+	sent_clase  goto 42
+	metodo  goto 43
+	atributo  goto 44
+	friendly  goto 45
+	herencia  goto 46
+	tipo  goto 47
+
+
+state 21
+	bloque_ejecutable : BEGIN . sentencias_ejecutables END  (9)
+
+	ID  shift 48
+	WHILE  shift 49
+	IF  shift 50
+	POUT  shift 51
+	.  error
+
+	if  goto 52
+	sentencia_ejecutable  goto 53
+	sentencias_ejecutables  goto 54
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+
+
+state 22
+	programa : error sentencias_declarativas bloque_ejecutable .  (2)
+
+	.  reduce 2
+
+
+state 23
+	sentencias_declarativas : sentencia_declarativa sentencias_declarativas .  (17)
+
+	.  reduce 17
+
+
+state 24
+	sentencia_declarativa : declaracion_var ';' .  (18)
+
+	.  reduce 18
+
+
+state 25
+	sentencia_declarativa : funcion ';' .  (19)
+
+	.  reduce 19
+
+
+state 26
+	sentencia_declarativa : clase ';' .  (20)
+
+	.  reduce 20
+
+
+state 27
+	sentencia_declarativa : enum ';' .  (21)
+
+	.  reduce 21
+
+
+28: reduce/reduce conflict (reduce 62, reduce 63) on ';'
+state 28
+	declaracion_var : tipo ID .  (62)
+	lista_de_variables : ID .  (63)
+	lista_de_variables : ID . ',' lista_de_variables  (64)
+
+	','  shift 58
+	';'  reduce 62
+
+
+state 29
+	funcion : tipo FUNCTION . ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable  (70)
+
+	ID  shift 59
+	.  error
+
+
+state 30
+	declaracion_var : tipo lista_de_variables .  (61)
+
+	.  reduce 61
+
+
+state 31
+	programa : ID sentencias_declarativas bloque_ejecutable .  (1)
+
+	.  reduce 1
+
+
+state 32
+	funcion : AUTO FUNCTION ID . '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (71)
+
+	'('  shift 60
+	.  error
+
+
+state 33
+	enum : TYPEDEF ID '=' . '[' lista_valores ']'  (81)
+
+	'['  shift 61
+	.  error
+
+
+state 34
+	metodo : AUTO . ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (33)
+
+	ID  shift 62
+	.  error
+
+
+state 35
+	friendly : FRIEND . ID  (59)
+
+	ID  shift 63
+	.  error
+
+
+state 36
+	metodo : PRIVATE . tipo ID '(' parametros_formales ')' sentencias_declarativas bloque_func  (30)
+	metodo : PRIVATE . AUTO ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (31)
+	atributo : PRIVATE . enum  (57)
+	atributo : PRIVATE . declaracion_var  (58)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 64
+	TYPEDEF  shift 8
+	.  error
+
+	declaracion_var  goto 65
+	enum  goto 66
+	tipo  goto 67
+
+
+state 37
+	herencia : EXTENDS . lista_de_variables  (60)
+
+	ID  shift 68
+	.  error
+
+	lista_de_variables  goto 69
+
+
+state 38
+	clase : CLASS ID BEGIN . cuerpo_clase END  (22)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 34
+	TYPEDEF  shift 8
+	FRIEND  shift 35
+	PRIVATE  shift 36
+	EXTENDS  shift 37
+	.  error
+
+	declaracion_var  goto 39
+	enum  goto 40
+	cuerpo_clase  goto 70
+	sent_clase  goto 42
+	metodo  goto 43
+	atributo  goto 44
+	friendly  goto 45
+	herencia  goto 46
+	tipo  goto 47
+
+
+state 39
+	atributo : declaracion_var .  (55)
+
+	.  reduce 55
+
+
+state 40
+	atributo : enum .  (56)
+
+	.  reduce 56
+
+
+state 41
+	clase : CLASS ID cuerpo_clase . END  (23)
+
+	END  shift 71
+	.  error
+
+
+state 42
+	cuerpo_clase : sent_clase .  (24)
+	cuerpo_clase : sent_clase . cuerpo_clase  (25)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 34
+	TYPEDEF  shift 8
+	FRIEND  shift 35
+	PRIVATE  shift 36
+	EXTENDS  shift 37
+	END  reduce 24
+
+	declaracion_var  goto 39
+	enum  goto 40
+	cuerpo_clase  goto 72
+	sent_clase  goto 42
+	metodo  goto 43
+	atributo  goto 44
+	friendly  goto 45
+	herencia  goto 46
+	tipo  goto 47
+
+
+state 43
+	sent_clase : metodo . ';'  (26)
+
+	';'  shift 73
+	.  error
+
+
+state 44
+	sent_clase : atributo . ';'  (27)
+
+	';'  shift 74
+	.  error
+
+
+state 45
+	sent_clase : friendly . ';'  (28)
+
+	';'  shift 75
+	.  error
+
+
+state 46
+	sent_clase : herencia . ';'  (29)
+
+	';'  shift 76
+	.  error
+
+
+state 47
+	metodo : tipo . ID '(' parametros_formales ')' sentencias_declarativas bloque_func  (32)
+	declaracion_var : tipo . lista_de_variables  (61)
+	declaracion_var : tipo . ID  (62)
+
+	ID  shift 77
+	.  error
+
+	lista_de_variables  goto 30
+
+
+state 48
+	assign : ID . OP_ASSIGN expr_asig  (90)
+	assign : ID . '=' expr  (91)
+
+	OP_ASSIGN  shift 78
+	'='  shift 79
+	.  error
+
+
+state 49
+	while_repeat : WHILE . '(' comp ')' REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE . '(' comp ')' REPEAT sentencia_ejecutable  (83)
+
+	'('  shift 80
+	.  error
+
+
+state 50
+	if : IF . '(' comp ')' bloque_ejecutable END_IF  (3)
+	if : IF . '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF . '(' comp ')' sentencia_ejecutable END_IF  (5)
+	if : IF . '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF . '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF . '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+
+	'('  shift 81
+	.  error
+
+
+state 51
+	print : POUT . '(' expr ')'  (79)
+	print : POUT . '(' cadena ')'  (80)
+
+	'('  shift 82
+	.  error
+
+
+state 52
+	sentencia_ejecutable : if . ';'  (13)
+
+	';'  shift 83
+	.  error
+
+
+state 53
+	sentencias_ejecutables : sentencia_ejecutable .  (10)
+	sentencias_ejecutables : sentencia_ejecutable . sentencias_ejecutables  (11)
+
+	ID  shift 48
+	WHILE  shift 49
+	IF  shift 50
+	POUT  shift 51
+	END  reduce 10
+
+	if  goto 52
+	sentencia_ejecutable  goto 53
+	sentencias_ejecutables  goto 84
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+
+
+state 54
+	bloque_ejecutable : BEGIN sentencias_ejecutables . END  (9)
+
+	END  shift 85
+	.  error
+
+
+state 55
+	sentencia_ejecutable : assign . ';'  (12)
+
+	';'  shift 86
+	.  error
+
+
+state 56
+	sentencia_ejecutable : while_repeat . ';'  (14)
+
+	';'  shift 87
+	.  error
+
+
+state 57
+	sentencia_ejecutable : print . ';'  (15)
+
+	';'  shift 88
+	.  error
+
+
+state 58
+	lista_de_variables : ID ',' . lista_de_variables  (64)
+
+	ID  shift 68
+	.  error
+
+	lista_de_variables  goto 89
+
+
+state 59
+	funcion : tipo FUNCTION ID . '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable  (70)
+
+	'('  shift 90
+	.  error
+
+
+state 60
+	funcion : AUTO FUNCTION ID '(' . parametros_formales ')' sentencias_declarativas bloque_retorno  (71)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	.  error
+
+	tipo  goto 91
+	parametros_formales  goto 92
+
+
+state 61
+	enum : TYPEDEF ID '=' '[' . lista_valores ']'  (81)
+
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	lista_valores  goto 95
+	cte  goto 96
+
+
+state 62
+	metodo : AUTO ID . '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (33)
+
+	'('  shift 97
+	.  error
+
+
+state 63
+	friendly : FRIEND ID .  (59)
+
+	.  reduce 59
+
+
+state 64
+	metodo : PRIVATE AUTO . ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (31)
+
+	ID  shift 98
+	.  error
+
+
+state 65
+	atributo : PRIVATE declaracion_var .  (58)
+
+	.  reduce 58
+
+
+state 66
+	atributo : PRIVATE enum .  (57)
+
+	.  reduce 57
+
+
+state 67
+	metodo : PRIVATE tipo . ID '(' parametros_formales ')' sentencias_declarativas bloque_func  (30)
+	declaracion_var : tipo . lista_de_variables  (61)
+	declaracion_var : tipo . ID  (62)
+
+	ID  shift 99
+	.  error
+
+	lista_de_variables  goto 30
+
+
+state 68
+	lista_de_variables : ID .  (63)
+	lista_de_variables : ID . ',' lista_de_variables  (64)
+
+	','  shift 58
+	';'  reduce 63
+
+
+state 69
+	herencia : EXTENDS lista_de_variables .  (60)
+
+	.  reduce 60
+
+
+state 70
+	clase : CLASS ID BEGIN cuerpo_clase . END  (22)
+
+	END  shift 100
+	.  error
+
+
+state 71
+	clase : CLASS ID cuerpo_clase END .  (23)
+
+	.  reduce 23
+
+
+state 72
+	cuerpo_clase : sent_clase cuerpo_clase .  (25)
+
+	.  reduce 25
+
+
+state 73
+	sent_clase : metodo ';' .  (26)
+
+	.  reduce 26
+
+
+state 74
+	sent_clase : atributo ';' .  (27)
+
+	.  reduce 27
+
+
+state 75
+	sent_clase : friendly ';' .  (28)
+
+	.  reduce 28
+
+
+state 76
+	sent_clase : herencia ';' .  (29)
+
+	.  reduce 29
+
+
+77: reduce/reduce conflict (reduce 62, reduce 63) on ';'
+state 77
+	metodo : tipo ID . '(' parametros_formales ')' sentencias_declarativas bloque_func  (32)
+	declaracion_var : tipo ID .  (62)
+	lista_de_variables : ID .  (63)
+	lista_de_variables : ID . ',' lista_de_variables  (64)
+
+	'('  shift 101
+	','  shift 58
+	';'  reduce 62
+
+
+state 78
+	assign : ID OP_ASSIGN . expr_asig  (90)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 105
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 79
+	assign : ID '=' . expr  (91)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr  goto 110
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 80
+	while_repeat : WHILE '(' . comp ')' REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE '(' . comp ')' REPEAT sentencia_ejecutable  (83)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	comp  goto 111
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 112
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 81
+	if : IF '(' . comp ')' bloque_ejecutable END_IF  (3)
+	if : IF '(' . comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' . comp ')' sentencia_ejecutable END_IF  (5)
+	if : IF '(' . comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' . comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF '(' . comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	comp  goto 113
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 112
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 82
+	print : POUT '(' . expr ')'  (79)
+	print : POUT '(' . cadena ')'  (80)
+
+	ID  shift 102
+	STRING  shift 114
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr  goto 115
+	cadena  goto 116
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 83
+	sentencia_ejecutable : if ';' .  (13)
+
+	.  reduce 13
+
+
+state 84
+	sentencias_ejecutables : sentencia_ejecutable sentencias_ejecutables .  (11)
+
+	.  reduce 11
+
+
+state 85
+	bloque_ejecutable : BEGIN sentencias_ejecutables END .  (9)
+
+	.  reduce 9
+
+
+state 86
+	sentencia_ejecutable : assign ';' .  (12)
+
+	.  reduce 12
+
+
+state 87
+	sentencia_ejecutable : while_repeat ';' .  (14)
+
+	.  reduce 14
+
+
+state 88
+	sentencia_ejecutable : print ';' .  (15)
+
+	.  reduce 15
+
+
+state 89
+	lista_de_variables : ID ',' lista_de_variables .  (64)
+
+	.  reduce 64
+
+
+state 90
+	funcion : tipo FUNCTION ID '(' . parametros_formales ')' sentencias_declarativas bloque_ejecutable  (70)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	.  error
+
+	tipo  goto 91
+	parametros_formales  goto 117
+
+
+state 91
+	parametros_formales : tipo . ID  (72)
+	parametros_formales : tipo . ID ',' parametros_formales  (73)
+
+	ID  shift 118
+	.  error
+
+
+state 92
+	funcion : AUTO FUNCTION ID '(' parametros_formales . ')' sentencias_declarativas bloque_retorno  (71)
+
+	')'  shift 119
+	.  error
+
+
+state 93
+	cte : CTE_ENTERA .  (106)
+
+	.  reduce 106
+
+
+state 94
+	cte : CTE_DOUBLE .  (107)
+
+	.  reduce 107
+
+
+state 95
+	enum : TYPEDEF ID '=' '[' lista_valores . ']'  (81)
+
+	']'  shift 120
+	.  error
+
+
+state 96
+	lista_valores : cte .  (65)
+	lista_valores : cte . ',' lista_valores  (66)
+
+	','  shift 121
+	']'  reduce 65
+
+
+state 97
+	metodo : AUTO ID '(' . parametros_formales ')' sentencias_declarativas bloque_retorno  (33)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	.  error
+
+	tipo  goto 91
+	parametros_formales  goto 122
+
+
+state 98
+	metodo : PRIVATE AUTO ID . '(' parametros_formales ')' sentencias_declarativas bloque_retorno  (31)
+
+	'('  shift 123
+	.  error
+
+
+99: reduce/reduce conflict (reduce 62, reduce 63) on ';'
+state 99
+	metodo : PRIVATE tipo ID . '(' parametros_formales ')' sentencias_declarativas bloque_func  (30)
+	declaracion_var : tipo ID .  (62)
+	lista_de_variables : ID .  (63)
+	lista_de_variables : ID . ',' lista_de_variables  (64)
+
+	'('  shift 124
+	','  shift 58
+	';'  reduce 62
+
+
+state 100
+	clase : CLASS ID BEGIN cuerpo_clase END .  (22)
+
+	.  reduce 22
+
+
+state 101
+	metodo : tipo ID '(' . parametros_formales ')' sentencias_declarativas bloque_func  (32)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	.  error
+
+	tipo  goto 91
+	parametros_formales  goto 125
+
+
+state 102
+	invocacion_funcion : ID . '(' parametros_reales ')'  (74)
+	variable : ID .  (103)
+	variable : ID . '.' ID  (104)
+	variable : ID . '.' invocacion_funcion  (105)
+
+	'('  shift 126
+	'.'  shift 127
+	MAYOR_IGUAL  reduce 103
+	MENOR_IGUAL  reduce 103
+	DISTINTO  reduce 103
+	IGUALDAD  reduce 103
+	')'  reduce 103
+	';'  reduce 103
+	','  reduce 103
+	'='  reduce 103
+	'<'  reduce 103
+	'>'  reduce 103
+	'+'  reduce 103
+	'-'  reduce 103
+	'/'  reduce 103
+	'*'  reduce 103
+
+
+state 103
+	factor : cte .  (101)
+
+	.  reduce 101
+
+
+state 104
+	factor : invocacion_funcion .  (102)
+
+	.  reduce 102
+
+
+state 105
+	assign : ID OP_ASSIGN expr_asig .  (90)
+
+	.  reduce 90
+
+
+state 106
+	expr_asig : expr .  (92)
+	expr_asig : expr . '=' expr  (93)
+	expr : expr . '+' term  (94)
+	expr : expr . '-' term  (95)
+
+	'='  shift 128
+	'+'  shift 129
+	'-'  shift 130
+	MAYOR_IGUAL  reduce 92
+	MENOR_IGUAL  reduce 92
+	DISTINTO  reduce 92
+	IGUALDAD  reduce 92
+	')'  reduce 92
+	';'  reduce 92
+	','  reduce 92
+	'<'  reduce 92
+	'>'  reduce 92
+
+
+state 107
+	expr : term .  (96)
+	term : term . '/' factor  (97)
+	term : term . '*' factor  (98)
+
+	'/'  shift 131
+	'*'  shift 132
+	MAYOR_IGUAL  reduce 96
+	MENOR_IGUAL  reduce 96
+	DISTINTO  reduce 96
+	IGUALDAD  reduce 96
+	')'  reduce 96
+	';'  reduce 96
+	','  reduce 96
+	'='  reduce 96
+	'<'  reduce 96
+	'>'  reduce 96
+	'+'  reduce 96
+	'-'  reduce 96
+
+
+state 108
+	term : factor .  (99)
+
+	.  reduce 99
+
+
+state 109
+	factor : variable .  (100)
+
+	.  reduce 100
+
+
+state 110
+	assign : ID '=' expr .  (91)
+	expr : expr . '+' term  (94)
+	expr : expr . '-' term  (95)
+
+	'+'  shift 129
+	'-'  shift 130
+	';'  reduce 91
+
+
+state 111
+	while_repeat : WHILE '(' comp . ')' REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE '(' comp . ')' REPEAT sentencia_ejecutable  (83)
+
+	')'  shift 133
+	.  error
+
+
+state 112
+	comp : expr_asig . '<' expr_asig  (84)
+	comp : expr_asig . '>' expr_asig  (85)
+	comp : expr_asig . MAYOR_IGUAL expr_asig  (86)
+	comp : expr_asig . MENOR_IGUAL expr_asig  (87)
+	comp : expr_asig . DISTINTO expr_asig  (88)
+	comp : expr_asig . IGUALDAD expr_asig  (89)
+
+	MAYOR_IGUAL  shift 134
+	MENOR_IGUAL  shift 135
+	DISTINTO  shift 136
+	IGUALDAD  shift 137
+	'<'  shift 138
+	'>'  shift 139
+	.  error
+
+
+state 113
+	if : IF '(' comp . ')' bloque_ejecutable END_IF  (3)
+	if : IF '(' comp . ')' bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' comp . ')' sentencia_ejecutable END_IF  (5)
+	if : IF '(' comp . ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' comp . ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF '(' comp . ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+
+	')'  shift 140
+	.  error
+
+
+state 114
+	cadena : STRING .  (78)
+
+	.  reduce 78
+
+
+state 115
+	print : POUT '(' expr . ')'  (79)
+	expr : expr . '+' term  (94)
+	expr : expr . '-' term  (95)
+
+	')'  shift 141
+	'+'  shift 129
+	'-'  shift 130
+	.  error
+
+
+state 116
+	print : POUT '(' cadena . ')'  (80)
+
+	')'  shift 142
+	.  error
+
+
+state 117
+	funcion : tipo FUNCTION ID '(' parametros_formales . ')' sentencias_declarativas bloque_ejecutable  (70)
+
+	')'  shift 143
+	.  error
+
+
+state 118
+	parametros_formales : tipo ID .  (72)
+	parametros_formales : tipo ID . ',' parametros_formales  (73)
+
+	','  shift 144
+	')'  reduce 72
+
+
+state 119
+	funcion : AUTO FUNCTION ID '(' parametros_formales ')' . sentencias_declarativas bloque_retorno  (71)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 145
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 120
+	enum : TYPEDEF ID '=' '[' lista_valores ']' .  (81)
+
+	.  reduce 81
+
+
+state 121
+	lista_valores : cte ',' . lista_valores  (66)
+
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	lista_valores  goto 146
+	cte  goto 96
+
+
+state 122
+	metodo : AUTO ID '(' parametros_formales . ')' sentencias_declarativas bloque_retorno  (33)
+
+	')'  shift 147
+	.  error
+
+
+state 123
+	metodo : PRIVATE AUTO ID '(' . parametros_formales ')' sentencias_declarativas bloque_retorno  (31)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	.  error
+
+	tipo  goto 91
+	parametros_formales  goto 148
+
+
+state 124
+	metodo : PRIVATE tipo ID '(' . parametros_formales ')' sentencias_declarativas bloque_func  (30)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	.  error
+
+	tipo  goto 91
+	parametros_formales  goto 149
+
+
+state 125
+	metodo : tipo ID '(' parametros_formales . ')' sentencias_declarativas bloque_func  (32)
+
+	')'  shift 150
+	.  error
+
+
+state 126
+	invocacion_funcion : ID '(' . parametros_reales ')'  (74)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	parametros_reales  goto 151
+	expr_asig  goto 152
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 127
+	variable : ID '.' . ID  (104)
+	variable : ID '.' . invocacion_funcion  (105)
+
+	ID  shift 153
+	.  error
+
+	invocacion_funcion  goto 154
+
+
+state 128
+	expr_asig : expr '=' . expr  (93)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr  goto 155
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 129
+	expr : expr '+' . term  (94)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	term  goto 156
+	factor  goto 108
+	variable  goto 109
+
+
+state 130
+	expr : expr '-' . term  (95)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	term  goto 157
+	factor  goto 108
+	variable  goto 109
+
+
+state 131
+	term : term '/' . factor  (97)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	factor  goto 158
+	variable  goto 109
+
+
+state 132
+	term : term '*' . factor  (98)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	factor  goto 159
+	variable  goto 109
+
+
+state 133
+	while_repeat : WHILE '(' comp ')' . REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE '(' comp ')' . REPEAT sentencia_ejecutable  (83)
+
+	REPEAT  shift 160
+	.  error
+
+
+state 134
+	comp : expr_asig MAYOR_IGUAL . expr_asig  (86)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 161
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 135
+	comp : expr_asig MENOR_IGUAL . expr_asig  (87)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 162
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 136
+	comp : expr_asig DISTINTO . expr_asig  (88)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 163
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 137
+	comp : expr_asig IGUALDAD . expr_asig  (89)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 164
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 138
+	comp : expr_asig '<' . expr_asig  (84)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 165
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 139
+	comp : expr_asig '>' . expr_asig  (85)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 166
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 140
+	if : IF '(' comp ')' . bloque_ejecutable END_IF  (3)
+	if : IF '(' comp ')' . bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' comp ')' . sentencia_ejecutable END_IF  (5)
+	if : IF '(' comp ')' . sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' comp ')' . bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF '(' comp ')' . sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+
+	ID  shift 48
+	WHILE  shift 49
+	IF  shift 50
+	BEGIN  shift 21
+	POUT  shift 51
+	.  error
+
+	bloque_ejecutable  goto 167
+	if  goto 52
+	sentencia_ejecutable  goto 168
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+
+
+state 141
+	print : POUT '(' expr ')' .  (79)
+
+	.  reduce 79
+
+
+state 142
+	print : POUT '(' cadena ')' .  (80)
+
+	.  reduce 80
+
+
+state 143
+	funcion : tipo FUNCTION ID '(' parametros_formales ')' . sentencias_declarativas bloque_ejecutable  (70)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 169
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 144
+	parametros_formales : tipo ID ',' . parametros_formales  (73)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	.  error
+
+	tipo  goto 91
+	parametros_formales  goto 170
+
+
+state 145
+	funcion : AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas . bloque_retorno  (71)
+
+	BEGIN  shift 171
+	.  error
+
+	bloque_retorno  goto 172
+
+
+state 146
+	lista_valores : cte ',' lista_valores .  (66)
+
+	.  reduce 66
+
+
+state 147
+	metodo : AUTO ID '(' parametros_formales ')' . sentencias_declarativas bloque_retorno  (33)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 173
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 148
+	metodo : PRIVATE AUTO ID '(' parametros_formales . ')' sentencias_declarativas bloque_retorno  (31)
+
+	')'  shift 174
+	.  error
+
+
+state 149
+	metodo : PRIVATE tipo ID '(' parametros_formales . ')' sentencias_declarativas bloque_func  (30)
+
+	')'  shift 175
+	.  error
+
+
+state 150
+	metodo : tipo ID '(' parametros_formales ')' . sentencias_declarativas bloque_func  (32)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 176
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 151
+	invocacion_funcion : ID '(' parametros_reales . ')'  (74)
+
+	')'  shift 177
+	.  error
+
+
+state 152
+	parametros_reales : expr_asig .  (75)
+	parametros_reales : expr_asig . ',' parametros_reales  (76)
+
+	','  shift 178
+	')'  reduce 75
+
+
+state 153
+	invocacion_funcion : ID . '(' parametros_reales ')'  (74)
+	variable : ID '.' ID .  (104)
+
+	'('  shift 126
+	MAYOR_IGUAL  reduce 104
+	MENOR_IGUAL  reduce 104
+	DISTINTO  reduce 104
+	IGUALDAD  reduce 104
+	')'  reduce 104
+	';'  reduce 104
+	','  reduce 104
+	'='  reduce 104
+	'<'  reduce 104
+	'>'  reduce 104
+	'+'  reduce 104
+	'-'  reduce 104
+	'/'  reduce 104
+	'*'  reduce 104
+
+
+state 154
+	variable : ID '.' invocacion_funcion .  (105)
+
+	.  reduce 105
+
+
+state 155
+	expr_asig : expr '=' expr .  (93)
+	expr : expr . '+' term  (94)
+	expr : expr . '-' term  (95)
+
+	'+'  shift 129
+	'-'  shift 130
+	MAYOR_IGUAL  reduce 93
+	MENOR_IGUAL  reduce 93
+	DISTINTO  reduce 93
+	IGUALDAD  reduce 93
+	')'  reduce 93
+	';'  reduce 93
+	','  reduce 93
+	'<'  reduce 93
+	'>'  reduce 93
+
+
+state 156
+	expr : expr '+' term .  (94)
+	term : term . '/' factor  (97)
+	term : term . '*' factor  (98)
+
+	'/'  shift 131
+	'*'  shift 132
+	MAYOR_IGUAL  reduce 94
+	MENOR_IGUAL  reduce 94
+	DISTINTO  reduce 94
+	IGUALDAD  reduce 94
+	')'  reduce 94
+	';'  reduce 94
+	','  reduce 94
+	'='  reduce 94
+	'<'  reduce 94
+	'>'  reduce 94
+	'+'  reduce 94
+	'-'  reduce 94
+
+
+state 157
+	expr : expr '-' term .  (95)
+	term : term . '/' factor  (97)
+	term : term . '*' factor  (98)
+
+	'/'  shift 131
+	'*'  shift 132
+	MAYOR_IGUAL  reduce 95
+	MENOR_IGUAL  reduce 95
+	DISTINTO  reduce 95
+	IGUALDAD  reduce 95
+	')'  reduce 95
+	';'  reduce 95
+	','  reduce 95
+	'='  reduce 95
+	'<'  reduce 95
+	'>'  reduce 95
+	'+'  reduce 95
+	'-'  reduce 95
+
+
+state 158
+	term : term '/' factor .  (97)
+
+	.  reduce 97
+
+
+state 159
+	term : term '*' factor .  (98)
+
+	.  reduce 98
+
+
+state 160
+	while_repeat : WHILE '(' comp ')' REPEAT . bloque_ejecutable  (82)
+	while_repeat : WHILE '(' comp ')' REPEAT . sentencia_ejecutable  (83)
+
+	ID  shift 48
+	WHILE  shift 49
+	IF  shift 50
+	BEGIN  shift 21
+	POUT  shift 51
+	.  error
+
+	bloque_ejecutable  goto 179
+	if  goto 52
+	sentencia_ejecutable  goto 180
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+
+
+state 161
+	comp : expr_asig MAYOR_IGUAL expr_asig .  (86)
+
+	.  reduce 86
+
+
+state 162
+	comp : expr_asig MENOR_IGUAL expr_asig .  (87)
+
+	.  reduce 87
+
+
+state 163
+	comp : expr_asig DISTINTO expr_asig .  (88)
+
+	.  reduce 88
+
+
+state 164
+	comp : expr_asig IGUALDAD expr_asig .  (89)
+
+	.  reduce 89
+
+
+state 165
+	comp : expr_asig '<' expr_asig .  (84)
+
+	.  reduce 84
+
+
+state 166
+	comp : expr_asig '>' expr_asig .  (85)
+
+	.  reduce 85
+
+
+state 167
+	if : IF '(' comp ')' bloque_ejecutable . END_IF  (3)
+	if : IF '(' comp ')' bloque_ejecutable . ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' comp ')' bloque_ejecutable . ELSE sentencia_ejecutable END_IF  (7)
+
+	ELSE  shift 181
+	END_IF  shift 182
+	.  error
+
+
+state 168
+	if : IF '(' comp ')' sentencia_ejecutable . END_IF  (5)
+	if : IF '(' comp ')' sentencia_ejecutable . ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' comp ')' sentencia_ejecutable . ELSE bloque_ejecutable END_IF  (8)
+
+	ELSE  shift 183
+	END_IF  shift 184
+	.  error
+
+
+state 169
+	funcion : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas . bloque_ejecutable  (70)
+
+	BEGIN  shift 21
+	.  error
+
+	bloque_ejecutable  goto 185
+
+
+state 170
+	parametros_formales : tipo ID ',' parametros_formales .  (73)
+
+	.  reduce 73
+
+
+state 171
+	bloque_retorno : BEGIN . sentencias_retornables END  (36)
+
+	ID  shift 48
+	WHILE  shift 186
+	IF  shift 187
+	POUT  shift 51
+	RET  shift 188
+	.  error
+
+	if  goto 52
+	sentencia_ejecutable  goto 189
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+	sentencias_retornables  goto 190
+	sentencias_func  goto 191
+	sent_func  goto 192
+	sentencia_retornable  goto 193
+	if_func  goto 194
+	while_repeat_func  goto 195
+	retorno  goto 196
+	if_retorno_seguro  goto 197
+
+
+state 172
+	funcion : AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno .  (71)
+
+	.  reduce 71
+
+
+state 173
+	metodo : AUTO ID '(' parametros_formales ')' sentencias_declarativas . bloque_retorno  (33)
+
+	BEGIN  shift 171
+	.  error
+
+	bloque_retorno  goto 198
+
+
+state 174
+	metodo : PRIVATE AUTO ID '(' parametros_formales ')' . sentencias_declarativas bloque_retorno  (31)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 199
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 175
+	metodo : PRIVATE tipo ID '(' parametros_formales ')' . sentencias_declarativas bloque_func  (30)
+
+	ID  shift 4
+	UNINTEGER  shift 5
+	DOUBLEF  shift 6
+	AUTO  shift 7
+	TYPEDEF  shift 8
+	CLASS  shift 9
+	.  error
+
+	sentencias_declarativas  goto 200
+	sentencia_declarativa  goto 11
+	declaracion_var  goto 12
+	funcion  goto 13
+	clase  goto 14
+	enum  goto 15
+	tipo  goto 16
+
+
+state 176
+	metodo : tipo ID '(' parametros_formales ')' sentencias_declarativas . bloque_func  (32)
+
+	BEGIN  shift 201
+	.  error
+
+	bloque_ejecutable  goto 202
+	bloque_func  goto 203
+	bloque_retorno  goto 204
+
+
+state 177
+	invocacion_funcion : ID '(' parametros_reales ')' .  (74)
+
+	.  reduce 74
+
+
+state 178
+	parametros_reales : expr_asig ',' . parametros_reales  (76)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	parametros_reales  goto 205
+	expr_asig  goto 152
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 179
+	while_repeat : WHILE '(' comp ')' REPEAT bloque_ejecutable .  (82)
+
+	.  reduce 82
+
+
+state 180
+	while_repeat : WHILE '(' comp ')' REPEAT sentencia_ejecutable .  (83)
+
+	.  reduce 83
+
+
+state 181
+	if : IF '(' comp ')' bloque_ejecutable ELSE . bloque_ejecutable END_IF  (4)
+	if : IF '(' comp ')' bloque_ejecutable ELSE . sentencia_ejecutable END_IF  (7)
+
+	ID  shift 48
+	WHILE  shift 49
+	IF  shift 50
+	BEGIN  shift 21
+	POUT  shift 51
+	.  error
+
+	bloque_ejecutable  goto 206
+	if  goto 52
+	sentencia_ejecutable  goto 207
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+
+
+state 182
+	if : IF '(' comp ')' bloque_ejecutable END_IF .  (3)
+
+	.  reduce 3
+
+
+state 183
+	if : IF '(' comp ')' sentencia_ejecutable ELSE . sentencia_ejecutable END_IF  (6)
+	if : IF '(' comp ')' sentencia_ejecutable ELSE . bloque_ejecutable END_IF  (8)
+
+	ID  shift 48
+	WHILE  shift 49
+	IF  shift 50
+	BEGIN  shift 21
+	POUT  shift 51
+	.  error
+
+	bloque_ejecutable  goto 208
+	if  goto 52
+	sentencia_ejecutable  goto 209
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+
+
+state 184
+	if : IF '(' comp ')' sentencia_ejecutable END_IF .  (5)
+
+	.  reduce 5
+
+
+state 185
+	funcion : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable .  (70)
+
+	.  reduce 70
+
+
+state 186
+	while_repeat_func : WHILE . '(' comp ')' REPEAT bloque_func  (53)
+	while_repeat_func : WHILE . '(' comp ')' REPEAT sent_func  (54)
+	while_repeat : WHILE . '(' comp ')' REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE . '(' comp ')' REPEAT sentencia_ejecutable  (83)
+
+	'('  shift 210
+	.  error
+
+
+state 187
+	if : IF . '(' comp ')' bloque_ejecutable END_IF  (3)
+	if : IF . '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF . '(' comp ')' sentencia_ejecutable END_IF  (5)
+	if : IF . '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF . '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF . '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+	if_retorno_seguro : IF . '(' comp ')' bloque_retorno ELSE bloque_retorno END_IF  (47)
+	if_retorno_seguro : IF . '(' comp ')' retorno ELSE retorno END_IF  (48)
+	if_retorno_seguro : IF . '(' comp ')' bloque_retorno ELSE retorno END_IF  (49)
+	if_retorno_seguro : IF . '(' comp ')' retorno ELSE bloque_retorno END_IF  (50)
+	if_func : IF . '(' comp ')' bloque_func END_IF  (51)
+	if_func : IF . '(' comp ')' sent_func END_IF  (52)
+
+	'('  shift 211
+	.  error
+
+
+state 188
+	retorno : RET . '(' expr ')'  (77)
+
+	'('  shift 212
+	.  error
+
+
+state 189
+	sent_func : sentencia_ejecutable .  (41)
+
+	.  reduce 41
+
+
+state 190
+	bloque_retorno : BEGIN sentencias_retornables . END  (36)
+
+	END  shift 213
+	.  error
+
+
+state 191
+	sentencias_func : sentencias_func . sent_func  (38)
+	sentencias_retornables : sentencias_func . sentencia_retornable  (40)
+
+	ID  shift 48
+	WHILE  shift 186
+	IF  shift 187
+	POUT  shift 51
+	RET  shift 188
+	.  error
+
+	if  goto 52
+	sentencia_ejecutable  goto 189
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+	sent_func  goto 214
+	sentencia_retornable  goto 215
+	if_func  goto 194
+	while_repeat_func  goto 195
+	retorno  goto 196
+	if_retorno_seguro  goto 197
+
+
+state 192
+	sentencias_func : sent_func .  (37)
+
+	.  reduce 37
+
+
+state 193
+	sentencias_retornables : sentencia_retornable .  (39)
+	sent_func : sentencia_retornable .  (42)
+
+	ID  reduce 42
+	WHILE  reduce 42
+	IF  reduce 42
+	END  reduce 39
+	POUT  reduce 42
+	RET  reduce 42
+
+
+state 194
+	sent_func : if_func . ';'  (43)
+
+	';'  shift 216
+	.  error
+
+
+state 195
+	sent_func : while_repeat_func . ';'  (44)
+
+	';'  shift 217
+	.  error
+
+
+state 196
+	sentencia_retornable : retorno . ';'  (45)
+
+	';'  shift 218
+	.  error
+
+
+state 197
+	sentencia_retornable : if_retorno_seguro . ';'  (46)
+
+	';'  shift 219
+	.  error
+
+
+state 198
+	metodo : AUTO ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno .  (33)
+
+	.  reduce 33
+
+
+state 199
+	metodo : PRIVATE AUTO ID '(' parametros_formales ')' sentencias_declarativas . bloque_retorno  (31)
+
+	BEGIN  shift 171
+	.  error
+
+	bloque_retorno  goto 220
+
+
+state 200
+	metodo : PRIVATE tipo ID '(' parametros_formales ')' sentencias_declarativas . bloque_func  (30)
+
+	BEGIN  shift 201
+	.  error
+
+	bloque_ejecutable  goto 202
+	bloque_func  goto 221
+	bloque_retorno  goto 204
+
+
+state 201
+	bloque_ejecutable : BEGIN . sentencias_ejecutables END  (9)
+	bloque_retorno : BEGIN . sentencias_retornables END  (36)
+
+	ID  shift 48
+	WHILE  shift 186
+	IF  shift 187
+	POUT  shift 51
+	RET  shift 188
+	.  error
+
+	if  goto 52
+	sentencia_ejecutable  goto 222
+	sentencias_ejecutables  goto 54
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+	sentencias_retornables  goto 190
+	sentencias_func  goto 191
+	sent_func  goto 192
+	sentencia_retornable  goto 193
+	if_func  goto 194
+	while_repeat_func  goto 195
+	retorno  goto 196
+	if_retorno_seguro  goto 197
+
+
+state 202
+	bloque_func : bloque_ejecutable .  (35)
+
+	.  reduce 35
+
+
+state 203
+	metodo : tipo ID '(' parametros_formales ')' sentencias_declarativas bloque_func .  (32)
+
+	.  reduce 32
+
+
+state 204
+	bloque_func : bloque_retorno .  (34)
+
+	.  reduce 34
+
+
+state 205
+	parametros_reales : expr_asig ',' parametros_reales .  (76)
+
+	.  reduce 76
+
+
+state 206
+	if : IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable . END_IF  (4)
+
+	END_IF  shift 223
+	.  error
+
+
+state 207
+	if : IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable . END_IF  (7)
+
+	END_IF  shift 224
+	.  error
+
+
+state 208
+	if : IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable . END_IF  (8)
+
+	END_IF  shift 225
+	.  error
+
+
+state 209
+	if : IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable . END_IF  (6)
+
+	END_IF  shift 226
+	.  error
+
+
+state 210
+	while_repeat_func : WHILE '(' . comp ')' REPEAT bloque_func  (53)
+	while_repeat_func : WHILE '(' . comp ')' REPEAT sent_func  (54)
+	while_repeat : WHILE '(' . comp ')' REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE '(' . comp ')' REPEAT sentencia_ejecutable  (83)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	comp  goto 227
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 112
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 211
+	if : IF '(' . comp ')' bloque_ejecutable END_IF  (3)
+	if : IF '(' . comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' . comp ')' sentencia_ejecutable END_IF  (5)
+	if : IF '(' . comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' . comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF '(' . comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+	if_retorno_seguro : IF '(' . comp ')' bloque_retorno ELSE bloque_retorno END_IF  (47)
+	if_retorno_seguro : IF '(' . comp ')' retorno ELSE retorno END_IF  (48)
+	if_retorno_seguro : IF '(' . comp ')' bloque_retorno ELSE retorno END_IF  (49)
+	if_retorno_seguro : IF '(' . comp ')' retorno ELSE bloque_retorno END_IF  (50)
+	if_func : IF '(' . comp ')' bloque_func END_IF  (51)
+	if_func : IF '(' . comp ')' sent_func END_IF  (52)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	comp  goto 228
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr_asig  goto 112
+	expr  goto 106
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 212
+	retorno : RET '(' . expr ')'  (77)
+
+	ID  shift 102
+	CTE_ENTERA  shift 93
+	CTE_DOUBLE  shift 94
+	.  error
+
+	cte  goto 103
+	invocacion_funcion  goto 104
+	expr  goto 229
+	term  goto 107
+	factor  goto 108
+	variable  goto 109
+
+
+state 213
+	bloque_retorno : BEGIN sentencias_retornables END .  (36)
+
+	.  reduce 36
+
+
+state 214
+	sentencias_func : sentencias_func sent_func .  (38)
+
+	.  reduce 38
+
+
+state 215
+	sentencias_retornables : sentencias_func sentencia_retornable .  (40)
+	sent_func : sentencia_retornable .  (42)
+
+	ID  reduce 42
+	WHILE  reduce 42
+	IF  reduce 42
+	END  reduce 40
+	POUT  reduce 42
+	RET  reduce 42
+
+
+state 216
+	sent_func : if_func ';' .  (43)
+
+	.  reduce 43
+
+
+state 217
+	sent_func : while_repeat_func ';' .  (44)
+
+	.  reduce 44
+
+
+state 218
+	sentencia_retornable : retorno ';' .  (45)
+
+	.  reduce 45
+
+
+state 219
+	sentencia_retornable : if_retorno_seguro ';' .  (46)
+
+	.  reduce 46
+
+
+state 220
+	metodo : PRIVATE AUTO ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno .  (31)
+
+	.  reduce 31
+
+
+state 221
+	metodo : PRIVATE tipo ID '(' parametros_formales ')' sentencias_declarativas bloque_func .  (30)
+
+	.  reduce 30
+
+
+222: shift/reduce conflict (shift 48, reduce 41) on ID
+222: shift/reduce conflict (shift 49, reduce 41) on WHILE
+222: shift/reduce conflict (shift 50, reduce 41) on IF
+222: shift/reduce conflict (shift 51, reduce 41) on POUT
+state 222
+	sentencias_ejecutables : sentencia_ejecutable .  (10)
+	sentencias_ejecutables : sentencia_ejecutable . sentencias_ejecutables  (11)
+	sent_func : sentencia_ejecutable .  (41)
+
+	ID  shift 48
+	WHILE  shift 49
+	IF  shift 50
+	POUT  shift 51
+	END  reduce 10
+	RET  reduce 41
+
+	if  goto 52
+	sentencia_ejecutable  goto 53
+	sentencias_ejecutables  goto 84
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+
+
+state 223
+	if : IF '(' comp ')' bloque_ejecutable ELSE bloque_ejecutable END_IF .  (4)
+
+	.  reduce 4
+
+
+state 224
+	if : IF '(' comp ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF .  (7)
+
+	.  reduce 7
+
+
+state 225
+	if : IF '(' comp ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF .  (8)
+
+	.  reduce 8
+
+
+state 226
+	if : IF '(' comp ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF .  (6)
+
+	.  reduce 6
+
+
+state 227
+	while_repeat_func : WHILE '(' comp . ')' REPEAT bloque_func  (53)
+	while_repeat_func : WHILE '(' comp . ')' REPEAT sent_func  (54)
+	while_repeat : WHILE '(' comp . ')' REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE '(' comp . ')' REPEAT sentencia_ejecutable  (83)
+
+	')'  shift 230
+	.  error
+
+
+state 228
+	if : IF '(' comp . ')' bloque_ejecutable END_IF  (3)
+	if : IF '(' comp . ')' bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' comp . ')' sentencia_ejecutable END_IF  (5)
+	if : IF '(' comp . ')' sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' comp . ')' bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF '(' comp . ')' sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+	if_retorno_seguro : IF '(' comp . ')' bloque_retorno ELSE bloque_retorno END_IF  (47)
+	if_retorno_seguro : IF '(' comp . ')' retorno ELSE retorno END_IF  (48)
+	if_retorno_seguro : IF '(' comp . ')' bloque_retorno ELSE retorno END_IF  (49)
+	if_retorno_seguro : IF '(' comp . ')' retorno ELSE bloque_retorno END_IF  (50)
+	if_func : IF '(' comp . ')' bloque_func END_IF  (51)
+	if_func : IF '(' comp . ')' sent_func END_IF  (52)
+
+	')'  shift 231
+	.  error
+
+
+state 229
+	retorno : RET '(' expr . ')'  (77)
+	expr : expr . '+' term  (94)
+	expr : expr . '-' term  (95)
+
+	')'  shift 232
+	'+'  shift 129
+	'-'  shift 130
+	.  error
+
+
+state 230
+	while_repeat_func : WHILE '(' comp ')' . REPEAT bloque_func  (53)
+	while_repeat_func : WHILE '(' comp ')' . REPEAT sent_func  (54)
+	while_repeat : WHILE '(' comp ')' . REPEAT bloque_ejecutable  (82)
+	while_repeat : WHILE '(' comp ')' . REPEAT sentencia_ejecutable  (83)
+
+	REPEAT  shift 233
+	.  error
+
+
+state 231
+	if : IF '(' comp ')' . bloque_ejecutable END_IF  (3)
+	if : IF '(' comp ')' . bloque_ejecutable ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' comp ')' . sentencia_ejecutable END_IF  (5)
+	if : IF '(' comp ')' . sentencia_ejecutable ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' comp ')' . bloque_ejecutable ELSE sentencia_ejecutable END_IF  (7)
+	if : IF '(' comp ')' . sentencia_ejecutable ELSE bloque_ejecutable END_IF  (8)
+	if_retorno_seguro : IF '(' comp ')' . bloque_retorno ELSE bloque_retorno END_IF  (47)
+	if_retorno_seguro : IF '(' comp ')' . retorno ELSE retorno END_IF  (48)
+	if_retorno_seguro : IF '(' comp ')' . bloque_retorno ELSE retorno END_IF  (49)
+	if_retorno_seguro : IF '(' comp ')' . retorno ELSE bloque_retorno END_IF  (50)
+	if_func : IF '(' comp ')' . bloque_func END_IF  (51)
+	if_func : IF '(' comp ')' . sent_func END_IF  (52)
+
+	ID  shift 48
+	WHILE  shift 186
+	IF  shift 187
+	BEGIN  shift 201
+	POUT  shift 51
+	RET  shift 188
+	.  error
+
+	bloque_ejecutable  goto 234
+	if  goto 52
+	sentencia_ejecutable  goto 235
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+	bloque_func  goto 236
+	bloque_retorno  goto 237
+	sent_func  goto 238
+	sentencia_retornable  goto 239
+	if_func  goto 194
+	while_repeat_func  goto 195
+	retorno  goto 240
+	if_retorno_seguro  goto 197
+
+
+state 232
+	retorno : RET '(' expr ')' .  (77)
+
+	.  reduce 77
+
+
+state 233
+	while_repeat_func : WHILE '(' comp ')' REPEAT . bloque_func  (53)
+	while_repeat_func : WHILE '(' comp ')' REPEAT . sent_func  (54)
+	while_repeat : WHILE '(' comp ')' REPEAT . bloque_ejecutable  (82)
+	while_repeat : WHILE '(' comp ')' REPEAT . sentencia_ejecutable  (83)
+
+	ID  shift 48
+	WHILE  shift 186
+	IF  shift 187
+	BEGIN  shift 201
+	POUT  shift 51
+	RET  shift 188
+	.  error
+
+	bloque_ejecutable  goto 241
+	if  goto 52
+	sentencia_ejecutable  goto 242
+	assign  goto 55
+	while_repeat  goto 56
+	print  goto 57
+	bloque_func  goto 243
+	bloque_retorno  goto 204
+	sent_func  goto 244
+	sentencia_retornable  goto 239
+	if_func  goto 194
+	while_repeat_func  goto 195
+	retorno  goto 196
+	if_retorno_seguro  goto 197
+
+
+234: shift/reduce conflict (shift 182, reduce 35) on END_IF
+state 234
+	if : IF '(' comp ')' bloque_ejecutable . END_IF  (3)
+	if : IF '(' comp ')' bloque_ejecutable . ELSE bloque_ejecutable END_IF  (4)
+	if : IF '(' comp ')' bloque_ejecutable . ELSE sentencia_ejecutable END_IF  (7)
+	bloque_func : bloque_ejecutable .  (35)
+
+	ELSE  shift 181
+	END_IF  shift 182
+
+
+235: shift/reduce conflict (shift 184, reduce 41) on END_IF
+state 235
+	if : IF '(' comp ')' sentencia_ejecutable . END_IF  (5)
+	if : IF '(' comp ')' sentencia_ejecutable . ELSE sentencia_ejecutable END_IF  (6)
+	if : IF '(' comp ')' sentencia_ejecutable . ELSE bloque_ejecutable END_IF  (8)
+	sent_func : sentencia_ejecutable .  (41)
+
+	ELSE  shift 183
+	END_IF  shift 184
+
+
+state 236
+	if_func : IF '(' comp ')' bloque_func . END_IF  (51)
+
+	END_IF  shift 245
+	.  error
+
+
+state 237
+	bloque_func : bloque_retorno .  (34)
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno . ELSE bloque_retorno END_IF  (47)
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno . ELSE retorno END_IF  (49)
+
+	ELSE  shift 246
+	END_IF  reduce 34
+
+
+state 238
+	if_func : IF '(' comp ')' sent_func . END_IF  (52)
+
+	END_IF  shift 247
+	.  error
+
+
+state 239
+	sent_func : sentencia_retornable .  (42)
+
+	.  reduce 42
+
+
+state 240
+	sentencia_retornable : retorno . ';'  (45)
+	if_retorno_seguro : IF '(' comp ')' retorno . ELSE retorno END_IF  (48)
+	if_retorno_seguro : IF '(' comp ')' retorno . ELSE bloque_retorno END_IF  (50)
+
+	ELSE  shift 248
+	';'  shift 218
+	.  error
+
+
+241: reduce/reduce conflict (reduce 35, reduce 82) on ';'
+state 241
+	bloque_func : bloque_ejecutable .  (35)
+	while_repeat : WHILE '(' comp ')' REPEAT bloque_ejecutable .  (82)
+
+	.  reduce 35
+
+
+242: reduce/reduce conflict (reduce 41, reduce 83) on ';'
+state 242
+	sent_func : sentencia_ejecutable .  (41)
+	while_repeat : WHILE '(' comp ')' REPEAT sentencia_ejecutable .  (83)
+
+	.  reduce 41
+
+
+state 243
+	while_repeat_func : WHILE '(' comp ')' REPEAT bloque_func .  (53)
+
+	.  reduce 53
+
+
+state 244
+	while_repeat_func : WHILE '(' comp ')' REPEAT sent_func .  (54)
+
+	.  reduce 54
+
+
+state 245
+	if_func : IF '(' comp ')' bloque_func END_IF .  (51)
+
+	.  reduce 51
+
+
+state 246
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno ELSE . bloque_retorno END_IF  (47)
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno ELSE . retorno END_IF  (49)
+
+	BEGIN  shift 171
+	RET  shift 188
+	.  error
+
+	bloque_retorno  goto 249
+	retorno  goto 250
+
+
+state 247
+	if_func : IF '(' comp ')' sent_func END_IF .  (52)
+
+	.  reduce 52
+
+
+state 248
+	if_retorno_seguro : IF '(' comp ')' retorno ELSE . retorno END_IF  (48)
+	if_retorno_seguro : IF '(' comp ')' retorno ELSE . bloque_retorno END_IF  (50)
+
+	BEGIN  shift 171
+	RET  shift 188
+	.  error
+
+	bloque_retorno  goto 251
+	retorno  goto 252
+
+
+state 249
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno ELSE bloque_retorno . END_IF  (47)
+
+	END_IF  shift 253
+	.  error
+
+
+state 250
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno ELSE retorno . END_IF  (49)
+
+	END_IF  shift 254
+	.  error
+
+
+state 251
+	if_retorno_seguro : IF '(' comp ')' retorno ELSE bloque_retorno . END_IF  (50)
+
+	END_IF  shift 255
+	.  error
+
+
+state 252
+	if_retorno_seguro : IF '(' comp ')' retorno ELSE retorno . END_IF  (48)
+
+	END_IF  shift 256
+	.  error
+
+
+state 253
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno ELSE bloque_retorno END_IF .  (47)
+
+	.  reduce 47
+
+
+state 254
+	if_retorno_seguro : IF '(' comp ')' bloque_retorno ELSE retorno END_IF .  (49)
+
+	.  reduce 49
+
+
+state 255
+	if_retorno_seguro : IF '(' comp ')' retorno ELSE bloque_retorno END_IF .  (50)
+
+	.  reduce 50
+
+
+state 256
+	if_retorno_seguro : IF '(' comp ')' retorno ELSE retorno END_IF .  (48)
+
+	.  reduce 48
+
+
+State 28 contains 1 reduce/reduce conflict.
+State 77 contains 1 reduce/reduce conflict.
+State 99 contains 1 reduce/reduce conflict.
+State 222 contains 4 shift/reduce conflicts.
+State 234 contains 1 shift/reduce conflict.
+State 235 contains 1 shift/reduce conflict.
+State 241 contains 1 reduce/reduce conflict.
+State 242 contains 1 reduce/reduce conflict.
+
+
+43 terminals, 45 nonterminals
+108 grammar rules, 257 states

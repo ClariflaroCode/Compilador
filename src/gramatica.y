@@ -10,6 +10,7 @@
     %%
    programa
         : ID sentencias_declarativas bloque_ejecutable {System.out.println("Es un programa");}
+        | error sentencias_declarativas bloque_ejecutable {yyerror("Error: falta nombre de programa");}
         ;
     if
           : IF '(' comp ')' bloque_ejecutable END_IF
@@ -161,6 +162,7 @@
    print
         : POUT '(' expr ')'
         | POUT '(' cadena ')' {System.out.println("es una cadena que se imprime");}
+        | POUT '(' error ')' {yyerror("Error: falta argumento en sentencia POUT.");}
         ;
 
    enum
