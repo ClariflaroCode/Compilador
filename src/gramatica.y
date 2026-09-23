@@ -100,10 +100,17 @@
         | IF '(' comp ')' retorno ELSE retorno END_IF {System.out.println("Soy un if retornable");}
         | IF '(' comp ')' bloque_retorno ELSE retorno END_IF {System.out.println("Soy un if retornable");}
         | IF '(' comp ')' retorno ELSE bloque_retorno END_IF {System.out.println("Soy un if retornable");}
+        | IF '(' comp ')' bloque_retorno ELSE bloque_retorno {yyerror("Error sintactico: Falta el END_IF");}
+        | IF '(' comp ')' retorno ELSE retorno  {yyerror("Error sintactico: Falta el END_IF");}
+        | IF '(' comp ')' bloque_retorno ELSE retorno {yyerror("Error sintactico: Falta el END_IF");}
+        | IF '(' comp ')' retorno ELSE bloque_retorno {yyerror("Error sintactico: Falta el END_IF");}
+
         ;
      if_func
         : IF '(' comp ')' bloque_func END_IF
         | IF '(' comp ')' sent_func END_IF
+        | IF '(' comp ')' bloque_func {yyerror("Error sintactico: Falta el END_IF");}
+        | IF '(' comp ')' sent_func {yyerror("Error sintactico: Falta el END_IF");}
         ;
      while_repeat_func
         : WHILE '(' comp ')' REPEAT bloque_func
@@ -146,6 +153,8 @@
    funcion 
         : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
         | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
+        | AUTO FUNCTION '(' parametros_formales ')' sentencias_declarativas bloque_retorno {yyerror("Error Sintactico: Falta nombre funcion");}
+        | tipo FUNCTION '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable {yyerror("Error Sintactico: Falta nombre funcion");}
         ;
    parametros_formales
         : tipo ID

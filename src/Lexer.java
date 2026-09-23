@@ -1,3 +1,4 @@
+package src;
 /*Asumimos que el estado final es el ESTADO_FINAL
  Una celda invalida esta representada con un TRANSICION_INVALIDA
 */
@@ -174,6 +175,7 @@ public class Lexer {
     				else {
     					//Agregar a tabla de simbolos y
     					tokenOutput = tokens.get("id");
+    					lexema = lexema.substring(0,22);
 						if (tablaSimbolos.containsKey(lexema)) {
                     		tablaSimbolos.put(lexema,tokenOutput);
                     	}
@@ -187,6 +189,7 @@ public class Lexer {
     				else {
     					tokenOutput = tokens.get("id");
     					lexema=lexema.toLowerCase();
+    					lexema = lexema.substring(0,22);
     					System.out.println("Warning: identificador escrito en mayusculas en linea "+line);//ERROR //mayuscula y no es palabra reservada, rescatado pasandolo a minusculas
     				}
     				return as4.aplicarAccion(lexema, entrada);
