@@ -3,6 +3,6 @@ UNINTEGER r;
 UNINTEGER b;
 BEGIN 
 a:=1$;
-a:= -1.0d+1;
+a:= -10.8888d+308;
 pout('holis');
 END

@@ -91,9 +91,21 @@ public class Lexer {
         construyeAccionesSemanticas();
 
     }
+    private static String checkRangoEntero(String lexema){
+        String numero=lexema.substring(0,lexema.indexOf('$'));
+        try {
+            if (Integer.valueOf(numero)>Math.pow(2,16)-1){
+            System.out.println("Warning: cte_entera fuera de rango");
+            return ""+((int)Math.pow(2,16)-1)+"$ui";
 
-    
-      private static String checkRangoDouble(String lexema){
+            }}
+        catch(Exception e){
+            System.out.println("Warning: error al leer constante entera");
+            return "0";
+        }
+        return lexema;
+    }
+    private static String checkRangoDouble(String lexema){
       int indiceD = lexema.indexOf('d');
 		double base=Double.valueOf(lexema.substring(0,indiceD));
       char signoPotencia=lexema.charAt(indiceD+1);
@@ -112,7 +124,7 @@ public class Lexer {
           potencia--;
         }
         if (Math.abs(potencia) > 308){
-
+            System.out.println("Warning: cte_double fuera de rango");
           if (potencia>0){
 
             base=1.7976931348623156;
@@ -125,11 +137,13 @@ public class Lexer {
         }else if (Math.abs(potencia)==308){
             if (potencia>0){
             	if (base > 1.7976931348623156){
+            	System.out.println("Warning: cte_double fuera de rango");
                   base = 1.7976931348623156;
 
                 }
             } else {
               if (base<2.2250738585072015){
+              System.out.println("Warning: cte_double fuera de rango");
                 base = 2.2250738585072015;
 
             }
@@ -140,7 +154,6 @@ public class Lexer {
       lexema=(base+"d"+signoPotencia+Math.abs(potencia));
       return lexema;
     }
-
 
     public void recibirPath(String path){ 
         try {
@@ -220,7 +233,8 @@ public class Lexer {
                     return lexema;
                 };
 
-                AccionSemantica a16=(lexema,entrada)->{
+                AccionSemantica as16=(lexema,entrada)->{
+                    
                     lexema=checkRangoDouble(lexema);
                     return as4.aplicarAccion(lexema,entrada);
                 };
@@ -233,8 +247,10 @@ public class Lexer {
     					tokenOutput = tokens.get("id");
                         if (lexema.length()>22)
                             lexema = lexema.substring(0,22);
+                            System.out.println("Warning: El ID excede los 22 caracteres");
 						if (tablaSimbolos.containsKey(lexema)) {
                     		tablaSimbolos.put(lexema,tokenOutput);
+                            
                     	}
     				}
     				return as4.aplicarAccion(lexema, entrada);
@@ -246,8 +262,10 @@ public class Lexer {
     				else {
     					tokenOutput = tokens.get("id");
     					lexema=lexema.toLowerCase();
-                        if (lexema.length()>22)
+                        if (lexema.length()>22) {
                             lexema = lexema.substring(0,22);
+                            System.out.println("Warning: El ID excede los 22 caracteres");
+                        }
     					System.out.println("Warning: identificador escrito en mayusculas en linea "+line);//ERROR //mayuscula y no es palabra reservada, rescatado pasandolo a minusculas
     				}
     				return as4.aplicarAccion(lexema, entrada);

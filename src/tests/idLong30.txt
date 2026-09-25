@@ -1,0 +1,8 @@
+programaaa 
+UNINTEGER r;
+UNINTEGER b;
+BEGIN 
+pikachusjaksaksjakjskajsakjsaksjaksjaskjasasjjaksjaksjjakspikachu:=65535808$;
+a:= -10.8888d-308;
+pout('holis');
+END
