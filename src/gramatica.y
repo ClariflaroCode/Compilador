@@ -48,8 +48,8 @@
         | enum ';'
         ;
    clase
-        : CLASS ID BEGIN cuerpo_clase END
-        | CLASS ID cuerpo_clase END
+        : CLASS ID BEGIN cuerpo_clase END {System.out.println("Soy una clase");}
+        | CLASS ID cuerpo_clase END {System.out.println("Soy una clase");}
         ;
    cuerpo_clase
         : sent_clase
@@ -101,12 +101,12 @@
 
         ;
      if_func
-        : IF '(' comp ')' bloque_func END_IF
-        | IF '(' comp ')' sent_func END_IF
+        : IF '(' comp ')' bloque_func END_IF {System.out.println("Es un IF");}
+        | IF '(' comp ')' sent_func END_IF {System.out.println("Es un IF");}
         ;
      while_repeat_func
-        : WHILE '(' comp ')' REPEAT bloque_func
-        | WHILE '(' comp ')' REPEAT sent_func
+        : WHILE '(' comp ')' REPEAT bloque_func {System.out.println("Es un WHILE");}
+        | WHILE '(' comp ')' REPEAT sent_func {System.out.println("Es un WHILE");}
         ;
     atributo
         : declaracion_var
@@ -143,8 +143,8 @@
         | ID
         ;
    funcion 
-        : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
-        | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno
+        : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable {System.out.println("Soy una funcion");}
+        | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_retorno {System.out.println("Soy una funcion auto");}
         ;
    parametros_formales
         : tipo ID
@@ -173,8 +173,8 @@
         : TYPEDEF ID '=' '[' lista_valores ']'
         ;
    while_repeat
-        : WHILE '(' comp ')' REPEAT bloque_ejecutable
-        | WHILE '(' comp ')' REPEAT sentencia_ejecutable
+        : WHILE '(' comp ')' REPEAT bloque_ejecutable {System.out.println("Es un WHILE");}
+        | WHILE '(' comp ')' REPEAT sentencia_ejecutable {System.out.println("Es un WHILE");}
         ;
    comp
         : expr_asig '<' expr_asig {System.out.println("Es una comparacion <");}
@@ -231,7 +231,10 @@
 
     cte
         : CTE_ENTERA 
-        | '-'CTE_DOUBLE  {System.out.println("Es una constante negativa");}
+        | '-'CTE_DOUBLE  {
+                              System.out.println("Es una constante negativa");
+                              
+                         } 
         ;
 %%
 

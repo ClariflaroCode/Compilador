@@ -567,7 +567,7 @@ final static String yyrule[] = {
 "cte : '-' CTE_DOUBLE",
 };
 
-//#line 237 "src/gramatica.y"
+//#line 240 "src/gramatica.y"
 
 static Lexer lex = null;
 
@@ -765,6 +765,14 @@ case 11:
 //#line 27 "src/gramatica.y"
 {yyerror("Errror sintactico: Falta el END");}
 break;
+case 24:
+//#line 51 "src/gramatica.y"
+{System.out.println("Soy una clase");}
+break;
+case 25:
+//#line 52 "src/gramatica.y"
+{System.out.println("Soy una clase");}
+break;
 case 47:
 //#line 93 "src/gramatica.y"
 {System.out.println("Soy una sent retornable");}
@@ -789,6 +797,22 @@ case 52:
 //#line 100 "src/gramatica.y"
 {System.out.println("Soy un if retornable");}
 break;
+case 53:
+//#line 104 "src/gramatica.y"
+{System.out.println("Es un IF");}
+break;
+case 54:
+//#line 105 "src/gramatica.y"
+{System.out.println("Es un IF");}
+break;
+case 55:
+//#line 108 "src/gramatica.y"
+{System.out.println("Es un WHILE");}
+break;
+case 56:
+//#line 109 "src/gramatica.y"
+{System.out.println("Es un WHILE");}
+break;
 case 60:
 //#line 115 "src/gramatica.y"
 {System.out.println("estamos permitiendo declaracion multiple de atributos");}
@@ -796,6 +820,14 @@ break;
 case 63:
 //#line 123 "src/gramatica.y"
 {yyerror("Error sintactico: ausencia de nombre o lista de clases");}
+break;
+case 73:
+//#line 146 "src/gramatica.y"
+{System.out.println("Soy una funcion");}
+break;
+case 74:
+//#line 147 "src/gramatica.y"
+{System.out.println("Soy una funcion auto");}
 break;
 case 81:
 //#line 164 "src/gramatica.y"
@@ -808,6 +840,14 @@ break;
 case 84:
 //#line 169 "src/gramatica.y"
 {yyerror("Error: falta argumento en sentencia POUT.");}
+break;
+case 86:
+//#line 176 "src/gramatica.y"
+{System.out.println("Es un WHILE");}
+break;
+case 87:
+//#line 177 "src/gramatica.y"
+{System.out.println("Es un WHILE");}
 break;
 case 88:
 //#line 180 "src/gramatica.y"
@@ -883,9 +923,12 @@ case 112:
 break;
 case 114:
 //#line 234 "src/gramatica.y"
-{System.out.println("Es una constante negativa");}
+{
+                              System.out.println("Es una constante negativa");
+                              
+                         }
 break;
-//#line 812 "Parser.java"
+//#line 855 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
