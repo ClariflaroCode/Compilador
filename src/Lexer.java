@@ -1,4 +1,4 @@
-package src;
+
 /*Asumimos que el estado final es el ESTADO_FINAL
  Una celda invalida esta representada con un TRANSICION_INVALIDA
 */
@@ -92,14 +92,7 @@ public class Lexer {
 
     }
 
-    private static String checkRangoEntero(String lexema){
-        if (((int)lexema)>Math.pow(2,16)-1){
-            return Math.pow(2,16)-1;
-        };
-        return lexema;
-
-
-    }
+    
 
     public void recibirPath(String path){ 
         try {
@@ -157,7 +150,7 @@ public class Lexer {
                     lexema = lexema+entrada;
                     //indexFile--;
                     //Parser.yylval = new ParserVal(lexema);
-                    lexema=checkRangoEntero(lexema);
+                    //lexema=checkRangoEntero(lexema);
 					if (tablaSimbolos.containsKey(lexema)) {
                     	tablaSimbolos.put(lexema,tokenOutput);
                     }
@@ -218,7 +211,7 @@ public class Lexer {
                     indexFile--;
                     System.out.println("Warning: Constante entera sin sufijo en linea "+line);
                     lexema = lexema+"$ui";
-                    lexema=checkRangoEntero(lexema);
+                    //lexema=checkRangoEntero(lexema);
                     if (tablaSimbolos.containsKey(lexema)) {
                     	tablaSimbolos.put(lexema,tokenOutput);
                     }
@@ -234,7 +227,7 @@ public class Lexer {
                 AccionSemantica as23=(lexema,entrada)->{
                     System.out.println("Warning: falta ui en constante entera en linea "+line);
                     lexema=lexema+"ui";
-                    lexema=checkRangoEntero(lexema);
+                    //lexema=checkRangoEntero(lexema);
                     return as4.aplicarAccion(lexema,entrada);
                 };
                 AccionSemantica as24=(lexema,entrada)->{

@@ -1,0 +1,8 @@
+programaaa 
+UNINTEGER r;
+UNINTEGER b;
+BEGIN 
+a:=1$;
+a:= -1.0d+1;
+pout('holis');
+END

@@ -35,7 +35,6 @@
         | if ';'
         | while_repeat ';'
         | print ';' 
-        | error ';' {yyerrflag=0;}
         ;
 
    sentencias_declarativas
@@ -47,7 +46,6 @@
         | funcion ';'
         | clase ';'
         | enum ';'
-        | error ';' {yyerrflag=0;}
         ;
    clase
         : CLASS ID BEGIN cuerpo_clase END
@@ -233,7 +231,7 @@
 
     cte
         : CTE_ENTERA 
-        | '-'CTE_DOUBLE  {Sytem.out.println("Es una constante negativa");}
+        | '-'CTE_DOUBLE  {System.out.println("Es una constante negativa");}
         ;
 %%
 
