@@ -93,6 +93,54 @@ public class Lexer {
     }
 
     
+      private static String checkRangoDouble(String lexema){
+      int indiceD = lexema.indexOf('d');
+		double base=Double.valueOf(lexema.substring(0,indiceD));
+      char signoPotencia=lexema.charAt(indiceD+1);
+      int potencia=Integer.valueOf(lexema.substring(indiceD+1,lexema.length()));
+
+
+      if (base==0.0)
+        return ("0.0d+1");
+      else {
+        while (base>9){
+          base=base/10;
+          potencia++;
+        }
+        while (base>0&&base<1){
+          base=base*10;
+          potencia--;
+        }
+        if (Math.abs(potencia) > 308){
+
+          if (potencia>0){
+
+            base=1.7976931348623156;
+
+          } else {
+
+            base=2.2250738585072015;
+          }
+		potencia=308;
+        }else if (Math.abs(potencia)==308){
+            if (potencia>0){
+            	if (base > 1.7976931348623156){
+                  base = 1.7976931348623156;
+
+                }
+            } else {
+              if (base<2.2250738585072015){
+                base = 2.2250738585072015;
+
+            }
+          }
+        }
+      }
+
+      lexema=(base+"d"+signoPotencia+Math.abs(potencia));
+      return lexema;
+    }
+
 
     public void recibirPath(String path){ 
         try {
@@ -113,8 +161,9 @@ public class Lexer {
                     	tablaSimbolos.put(lexema,tokenOutput);
                     }
     				return lexema;};
-    			AccionSemantica as5 = (lexema,entrada)->{indexFile--;
+    			AccionSemantica as5 = (lexema,entrada)->{
     				lexema = lexema+"d+1";
+    				lexema=checkRangoDouble(lexema);
 					return as4.aplicarAccion(lexema,entrada);
                 };
     			AccionSemantica as6 = (lexema,entrada)->{return lexema+"+"+entrada;};
@@ -171,6 +220,10 @@ public class Lexer {
                     return lexema;
                 };
 
+                AccionSemantica a16=(lexema,entrada)->{
+                    lexema=checkRangoDouble(lexema);
+                    return as4.aplicarAccion(lexema,entrada);
+                };
     			AccionSemantica as17=(lexema,entrada)->{
     				Integer esteToken = tokens.get(lexema.toLowerCase());
     				if (esteToken!=null)
@@ -211,7 +264,7 @@ public class Lexer {
                     indexFile--;
                     System.out.println("Warning: Constante entera sin sufijo en linea "+line);
                     lexema = lexema+"$ui";
-                    //lexema=checkRangoEntero(lexema);
+                    lexema=checkRangoEntero(lexema);
                     if (tablaSimbolos.containsKey(lexema)) {
                     	tablaSimbolos.put(lexema,tokenOutput);
                     }
@@ -227,7 +280,7 @@ public class Lexer {
                 AccionSemantica as23=(lexema,entrada)->{
                     System.out.println("Warning: falta ui en constante entera en linea "+line);
                     lexema=lexema+"ui";
-                    //lexema=checkRangoEntero(lexema);
+                    lexema=checkRangoEntero(lexema);
                     return as4.aplicarAccion(lexema,entrada);
                 };
                 AccionSemantica as24=(lexema,entrada)->{
@@ -238,11 +291,13 @@ public class Lexer {
                 AccionSemantica as25 = (lexema,entrada)->{
                     System.out.println("Warning: pontencia incompleta en constante flotante en linea "+line);
                     lexema = lexema+"+1";
+                    lexema=checkRangoDouble(lexema);
                     return as4.aplicarAccion(lexema,entrada);
                 };
                 AccionSemantica as26 = (lexema,entrada)->{
                     System.out.println("Warning: pontencia incompleta en constante flotante en linea "+line);
                     lexema = lexema +"1";
+                    lexema=checkRangoDouble(lexema);
                     return as4.aplicarAccion(lexema,entrada);
                 };
     			accionesSemanticas = new HashMap<String,AccionSemantica>();
@@ -268,7 +323,7 @@ public class Lexer {
     			accionesSemanticas.put("e7e8", as2);
     			accionesSemanticas.put("e7e17",as26);
     			accionesSemanticas.put("e8e8", as2);
-    			accionesSemanticas.put("e8e17", as4);
+    			accionesSemanticas.put("e8e17", as16);
     			accionesSemanticas.put("e0e9", as1);
     			accionesSemanticas.put("e0e10",as1);
     			accionesSemanticas.put("e9e9",as2);
