@@ -175,6 +175,13 @@
    while_repeat
         : WHILE '(' comp ')' REPEAT bloque_ejecutable {System.out.println("Es un WHILE");}
         | WHILE '(' comp ')' REPEAT sentencia_ejecutable {System.out.println("Es un WHILE");}
+        | WHILE error comp ')' REPEAT bloque_ejecutable {yyerror("Error, falta parentesis.");}
+        | WHILE '('comp error REPEAT bloque_ejecutable {yyerror("Error, falta parentesis.");}
+        | WHILE comp REPEAT bloque_ejecutable {yyerror("Error, faltan parentesis.");}
+        | WHILE '('comp ')' bloque_ejecutable {yyerror("Error, falta REPEAT");}
+        | '(' comp ')' REPEAT bloque_ejecutable {yyerror("Error, falta WHILE");}
+        | WHILE '(' ')' REPEAT bloque_ejecutable {yyerror("Error, falta condicion del WHILE");}
+        | WHILE '(' comp ')' REPEAT {yyerror("Error, falta cuerpo del while");}
         ;
    comp
         : expr_asig '<' expr_asig {System.out.println("Es una comparacion <");}
