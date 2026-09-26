@@ -1,0 +1,1 @@
+miu UNINTEGER a,b,c; BEGIN wile(a < c) REPEAT BEGIN b:=c; END; END

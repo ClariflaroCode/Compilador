@@ -1,0 +1,1 @@
+miu UNINTEGER a,b,c; BEGIN while (a < c) BEGIN b:=c; END; END
