@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 interface AccionSemantica {
@@ -367,6 +368,8 @@ public class Lexer {
         int estadoActual = 0;
         estadosPasados.add(estadoActual);
 
+
+        
         while (estadoActual != ESTADO_FINAL && estadoActual != TRANSICION_INVALIDA && indexFile<sourceCode.length()){
         	String transicion = "e"+estadoActual;
             char simbolo = sourceCode.charAt(indexFile);

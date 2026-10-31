@@ -1,0 +1,5 @@
+suma
+UNINTEGER c;
+BEGIN
+    c:=3+4;
+END

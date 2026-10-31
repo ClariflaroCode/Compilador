@@ -14,10 +14,11 @@ public class Main {
 			Lexer lexLuthor = new Lexer(path);
 			//System.out.println("hola"+Lexer.filaSimbolos.get(13)+"juli");
 			lexLuthor.recibirPath(path);
+
 			
 			Parser p  = new Parser();
 			int e = p.yyparse();
-			//System.out.println("imprimi esto " + e);
+			System.out.println("salida de yyparse(): " + e);
 			System.out.println(Lexer.line);
 			
 		} catch (Exception e) {
