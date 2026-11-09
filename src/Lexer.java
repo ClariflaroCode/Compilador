@@ -48,7 +48,7 @@ public class Lexer {
     public static Map<String, Integer> filaSimbolos;
     private static Map<String, AccionSemantica> accionesSemanticas; 
     private static String sourceCode;
-    public static Map<String, Integer> tablaSimbolos;
+    public static Map<String, DatosDelSimbolo> tablaSimbolos;
 
 
     public Lexer(String path) {
@@ -171,7 +171,23 @@ public class Lexer {
     			AccionSemantica as3 = (lexema,entrada)->{return "0"+entrada;};
     			AccionSemantica as4 = (lexema,entrada)->{indexFile--;
 					if (tablaSimbolos.containsKey(lexema)) {
-                    	tablaSimbolos.put(lexema,tokenOutput);
+                        if (tokenOutput == tokens.get("string")) {
+                            DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "string");
+	                        tablaSimbolos.put(lexema,d);
+                        } 
+                        else if (tokenOutput == tokens.get("cte_entera")) {
+                            DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "cte_entera");
+	                        tablaSimbolos.put(lexema,d); 
+                        }
+                        else if (tokenOutput == tokens.get("cte_double")){
+                            DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "cte_double");
+	                        tablaSimbolos.put(lexema,d);
+                        } else {
+                            //nos vino un id y socorro mary carmen no sabemos el tipo todavia. 
+                             DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "desconocido");
+	                        tablaSimbolos.put(lexema,d);
+                        }
+                    
                     }
     				return lexema;};
     			AccionSemantica as5 = (lexema,entrada)->{
@@ -214,7 +230,8 @@ public class Lexer {
                     //Parser.yylval = new ParserVal(lexema);
                     //lexema=checkRangoEntero(lexema);
 					if (tablaSimbolos.containsKey(lexema)) {
-                    	tablaSimbolos.put(lexema,tokenOutput);
+                    	DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "cte_entera");
+                    	tablaSimbolos.put(lexema,d);
                     }
                     tokenOutput = tokens.get("cte_entera");
                     return lexema;
@@ -228,7 +245,8 @@ public class Lexer {
                         System.out.println("Warning: Cadena terminada con salto de linea en linea "+line);
                     }
 					if (tablaSimbolos.containsKey(lexema)) {
-                    	tablaSimbolos.put(lexema,tokenOutput);
+                        DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "string");
+                    	tablaSimbolos.put(lexema, d);
                     }
                     return lexema;
                 };
@@ -249,7 +267,8 @@ public class Lexer {
                             lexema = lexema.substring(0,22);
                             System.out.println("Warning: El ID excede los 22 caracteres");
 						if (tablaSimbolos.containsKey(lexema)) {
-                    		tablaSimbolos.put(lexema,tokenOutput);
+                            DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "desconocido"); 
+                    		tablaSimbolos.put(lexema,d);
                             
                     	}
     				}
@@ -284,7 +303,8 @@ public class Lexer {
                     lexema = lexema+"$ui";
                     lexema=checkRangoEntero(lexema);
                     if (tablaSimbolos.containsKey(lexema)) {
-                    	tablaSimbolos.put(lexema,tokenOutput);
+                        DatosDelSimbolo d = new DatosDelSimbolo(tokenOutput, "cte_entera");
+                    	tablaSimbolos.put(lexema,d);
                     }
 
                     tokenOutput = tokens.get("cte_entera");
