@@ -49,6 +49,9 @@
 
      sentencias_declarativas
         : sentencia_declarativa 
+         {
+            System.out.println("st declarativa: " + $1.sval + "!!!!!!!!!!!!!!!!!!!!!!");
+         }
         | sentencias_declarativas sentencia_declarativa
         | sentencias_declarativas error { yyerrflag = 0; }
         ;
@@ -141,6 +144,10 @@
 
      declaracion_var
         : tipo lista_de_variables
+         {
+            // Por cada variable, dar de alta en la TS
+            System.out.println("Lista de variables: " + $2.sval);
+         }
         ;
    
      lista_de_variables
@@ -159,6 +166,10 @@
         ;
      funcion 
         : tipo FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
+         {
+            // Alta de la funcion en la TS
+
+         }
         | AUTO FUNCTION ID '(' parametros_formales ')' sentencias_declarativas bloque_ejecutable
         ;
      parametros_formales
@@ -203,17 +214,29 @@
 
 
      assign 
-        : ID OP_ASSIGN expr_asig {System.out.println("Es una asignación con := ");}
+        : ID OP_ASSIGN expr_asig 
+         {
+            System.out.println("Es una asignación con := ");
+            ter = new Terceto(val_peek(1).sval, val_peek(2).sval, listaTercetos.size()-1);
+            System.out.println(ter.imprimir());
+            listaTercetos.add(ter);
+         }
      ;
 
      expr_asig
         : expr 
-        | expr "=" expr  {System.out.println("Es una asignacion de expr");}
+        | expr "=" expr  
+        {
+            //System.out.println("Es una asignacion de expr");
+            ter = new Terceto(val_peek(1).sval, val_peek(2).sval, val_peek(0).sval);
+            System.out.println(ter.imprimir()); 
+            listaTercetos.add(ter);
+         }
         ;
 
      expr
         : expr '+' term
-            { System.out.println("Es una suma de los valores: " + $1 + " y " + $3);}
+            { System.out.println("Es una suma de los valores: " + $1.sval + " y " + $3.sval);}
         | expr '-' term
             { System.out.println("Es una resta de los valores: " + $1 + " y " + $3);}
         | expr term {yyerror("Error sintactico: Falta operador en expresión");}
@@ -251,12 +274,18 @@
 static Lexer lex = null;
 
 static Parser par = null;
+static 
+
+ArrayList<Terceto> listaTercetos = new ArrayList<>();
+Terceto ter;
 
 public static void main (String [] args) {
 
 System.out.println("Iniciando compilación...");
 
-lex = new Lexer (args[0]);
+lex = new Lexer(args[0]);
+
+// new Terceto("","","");
 
 par = new Parser (false);
 

@@ -18,7 +18,9 @@
 
 //#line 2 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
         import java.io.*;
+import java.util.ArrayList;
 //#line 19 "Parser.java"
+import java.util.List;
 
 
 
@@ -517,17 +519,24 @@ final static String yyrule[] = {
 "cte : CTE_DOUBLE",
 };
 
-//#line 250 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 273 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 
 static Lexer lex = null;
 
 static Parser par = null;
+static 
+
+ArrayList<Terceto> listaTercetos = new ArrayList<>();
+Terceto ter;
 
 public static void main (String [] args) {
 
 System.out.println("Iniciando compilación...");
 
-lex = new Lexer (args[0]);
+// lex = new Lexer(args[0]);
+lex = new Lexer("src/tests/autoFunc.txt");
+
+// new Terceto("","","");
 
 par = new Parser (false);
 
@@ -545,7 +554,7 @@ int yylex () {
 void yyerror (String s){
 System.out.println(s);
 }
-//#line 477 "Parser.java"
+//#line 483 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -723,99 +732,129 @@ case 20:
 //#line 53 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 { yyerrflag = 0; }
 break;
+case 22:
+//#line 52 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+{
+            System.out.println("st declarativa: " + val_peek(1).sval + "!!!!!!!!!!!!!!!!!!!!!!");
+         }
+break;
 case 33:
-//#line 74 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 77 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 { yyerrflag = 0; }
 break;
 case 41:
-//#line 131 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 134 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("estamos permitiendo declaracion multiple de atributos");}
 break;
 case 44:
-//#line 139 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 142 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {yyerror("Error sintactico: ausencia de nombre o lista de clases");}
 break;
+case 45:
+//#line 147 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+{
+            /* Por cada variable, dar de alta en la TS*/
+            System.out.println("Lista de variables: " + val_peek(0).sval);
+         }
+break;
+case 53:
+//#line 169 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+{
+            /* Alta de la funcion en la TS*/
+
+         }
+break;
 case 61:
-//#line 179 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 190 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es una cadena");}
 break;
 case 63:
-//#line 183 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 194 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("es una cadena que se imprime");}
 break;
 case 64:
-//#line 184 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 195 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {yyerror("Error: falta argumento en sentencia POUT.");}
 break;
 case 68:
-//#line 196 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 207 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es una comparacion <");}
 break;
 case 69:
-//#line 197 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 208 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es una comparacion >");}
 break;
 case 70:
-//#line 198 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 209 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es una comparacion >=");}
 break;
 case 71:
-//#line 199 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 210 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es una comparacion <=");}
 break;
 case 72:
-//#line 200 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 211 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es una desigualdad");}
 break;
 case 73:
-//#line 201 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 212 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es una igualdad");}
 break;
 case 74:
-//#line 206 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
-{System.out.println("Es una asignación con := ");}
+//#line 218 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+{
+            System.out.println("Es una asignación con := ");
+            ter = new Terceto(val_peek(1).sval, val_peek(2).sval, listaTercetos.size()-1);
+            System.out.println(ter.imprimir());
+            listaTercetos.add(ter);
+         }
 break;
 case 76:
-//#line 211 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
-{System.out.println("Es una asignacion de expr");}
+//#line 229 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+{
+            /*System.out.println("Es una asignacion de expr");*/
+            ter = new Terceto(val_peek(1).sval, val_peek(2).sval, val_peek(0).sval);
+            System.out.println(ter.imprimir()); 
+            listaTercetos.add(ter);
+         }
 break;
 case 77:
-//#line 216 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
-{ System.out.println("Es una suma de los valores: " + val_peek(2) + " y " + val_peek(0));}
+//#line 239 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+{ System.out.println("Es una suma de los valores: " + val_peek(2).sval + " y " + val_peek(0).sval);}
 break;
 case 78:
-//#line 218 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 241 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 { System.out.println("Es una resta de los valores: " + val_peek(2) + " y " + val_peek(0));}
 break;
 case 79:
-//#line 219 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 242 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {yyerror("Error sintactico: Falta operador en expresión");}
 break;
 case 80:
-//#line 220 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 243 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 { yyerror("Error sintactico: Falta operando en expr");}
 break;
 case 81:
-//#line 221 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 244 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 { yyerror("Error sintactico: Falta operando en expr");}
 break;
 case 83:
-//#line 228 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 251 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 { System.out.println("Es una división de los valores: " +val_peek(2) + " y " + val_peek(0));}
 break;
 case 84:
-//#line 230 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 253 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 { System.out.println("Es una multiplicación de los valores: " + val_peek(2) + " y " + val_peek(0));}
 break;
 case 90:
-//#line 241 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 264 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es un atributo");}
 break;
 case 91:
-//#line 242 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
+//#line 265 "C:\Users\Usuario\OneDrive\Desktop\Compilador\src\gramatica.y"
 {System.out.println("Es un acceso a metodo");}
 break;
-//#line 742 "Parser.java"
+//#line 778 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

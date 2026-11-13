@@ -1,1 +1,10 @@
-togepi UNINTEGER a; AUTO FUNCTION pikachu (UNINTEGER a) UNINTEGER b; BEGIN ret(1$ui+2$ui); END; BEGIN pout('flareon'); END
+togepi 
+    UNINTEGER a,d,f,e;
+    AUTO FUNCTION pikachu (UNINTEGER c) 
+        UNINTEGER b; 
+        BEGIN 
+            ret(1$ui+2$ui); 
+        END; 
+    BEGIN 
+        pout('flareon');
+    END

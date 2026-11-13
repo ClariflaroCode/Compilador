@@ -18,8 +18,8 @@ public class Main {
 			
 			Parser p  = new Parser();
 			int e = p.yyparse();
-			System.out.println("salida de yyparse(): " + e);
-			System.out.println(Lexer.line);
+			// System.out.println("salida de yyparse(): " + e);
+			// System.out.println(Lexer.line);
 			
 		} catch (Exception e) {
 			System.out.print(e);

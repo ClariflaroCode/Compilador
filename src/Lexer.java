@@ -396,7 +396,7 @@ public class Lexer {
             }
         }
         token.token = tokenOutput;
-        System.out.println("Imprimiendo token: " +token.token);
+        // System.out.println("Imprimiendo token: " +token.token);
         token.lexema = lexema;
         System.out.println("Imprimiendo lexema: " + token.lexema);
         return token;
